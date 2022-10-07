@@ -3,6 +3,7 @@ import { Sigma, EdgeShapes, ForceAtlas2, Filter, NOverlap, SigmaEnableWebGL } fr
 import Dagre from 'react-sigma/lib/Dagre'
 import ForceLink from 'react-sigma/lib/ForceLink'
 import { SigmaLoader } from '../components'
+import { ForceGraph2D } from 'react-force-graph';
 import { useStoreState, useStoreActions } from 'easy-peasy'
 import { Row, Col, Text, Select, Spacer, Input, Card } from '@geist-ui/react'
 import Search from '@geist-ui/react-icons/search'
@@ -111,7 +112,7 @@ const Graph = () => {
                     <Text p><b>{nodeDetails.color == "#FFFF00" ? '# of Providers:' : '# of Clients:'}</b> {nodeDetails.size}</Text>
                 </Card> }
             </Col>
-            <Col span={20}>
+            {/* <Col span={20}>
                 <Sigma renderer={renderer} settings={sigmaSettings} style={{maxWidth:"inherit", height:"80vh"}} onClickNode={ e => nodeClickHandler(e) } onClickStage={ () => stageClickHandler() }>
                     <SigmaLoader graph={graphData}>
                         <Filter nodesBy={nodesFilter} neighborsOf={node} />
@@ -119,6 +120,14 @@ const Graph = () => {
                         <EdgeShapes default="dashed" key={`${service}2`} />
                     </SigmaLoader>
                 </Sigma>
+            </Col> */}
+            <Col span={20}>
+                <ForceGraph2D 
+                    graphData={graphData}
+                    nodeLabel="label"
+                    nodeVal="val"
+                    nodeAutoColorBy="group"
+                />
             </Col>
         </Row>
     );
