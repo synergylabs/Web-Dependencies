@@ -1,0 +1,54 @@
+{
+    "type": "network",
+    "data": "data/graphData.json",
+    "version": "1.0",
+    "logo": {
+        "file": "images/CMU-Logo.png",
+        "link": "http://www.cmu.edu/",
+        "text": "Carnegie Mellon University"
+    },
+    "text": {
+        "title": "DNS dependency network of the top 1K sites on the Internet"
+    },
+    "legend": {
+        "nodeLabel": "Domain.",
+        "edgeLabel": "A DNS provider-customer relationship between two domains",
+        "colorLabel": "Color represents a grouping of domains, with blue representing DNS-providers and black the customers."
+    },
+    "features": {
+        "search": true,
+        "hoverBehavior": "default",
+        "groupSelectorAttribute": "color"
+    },
+    "search":{
+    	"fulltext":true
+    },
+    "informationPanel": {
+        "groupByEdgeDirection": false,
+        "imageAttribute": "Image File"
+    },
+    "sigma": {
+    	"drawingProperties":{    
+			"defaultLabelColor": "#000",
+			"defaultLabelSize": 14,
+			"defaultLabelBGColor": "#ddd",
+			"defaultHoverLabelBGColor": "#002147",
+			"defaultLabelHoverColor": "#fff",
+			"labelThreshold": 10,
+			"defaultEdgeType": "curve",
+			"hoverFontStyle": "bold",
+			"fontStyle": "bold",
+			"activeFontStyle": "bold"
+		},
+		"graphProperties":{
+			"minNodeSize": 1,
+			"maxNodeSize": 20,
+			"minEdgeSize": 0.2,
+			"maxEdgeSize": 0.5
+		},		
+		"mouseProperties":{
+			"minRatio": 0.75, 
+			"maxRatio": 20		}
+    }
+    
+}
