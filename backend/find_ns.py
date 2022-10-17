@@ -1,14 +1,17 @@
-from cProfile import run
 import sys
-import time
-import re
 import json
-import random
+import config
+import utils
 from io import TextIOWrapper
-from typing import Text
-from utils import run_subprocess, get_sld_tld, get_cert
 from constants import Ns_type, Node_type
 from typing import Tuple
+
+NXDOMAIN: str = "NXDOMAIN"
+SERVFAIL: str = "SERVFAIL"
+DOMAIN: str = "domain"
+MNAME: str = "mname"
+RNAME: str = "rname"
+SUBJECT_ALT_NAME: str = "subjectAltName"
 
 def measure(website_list_file: TextIOWrapper, top_n: int=1000) -> dict:
     """Dig all websites in the list and find their name servers
@@ -32,30 +35,30 @@ def measure(website_list_file: TextIOWrapper, top_n: int=1000) -> dict:
 
         # Get website url and domain
         url = line.strip()
-        domain = get_sld_tld(url)
+        domain = utils.get_sld_tld(url)
 
         if domain not in domains:
             domains.add(domain)
         else:
             continue
 
-        dig_domain_output = run_subprocess(['dig', domain, '+short'])
-        if 'NXDOMAIN' in dig_domain_output:
+        dig_domain_output = utils.run_subprocess(['dig', domain, '+short'])
+        if NXDOMAIN in dig_domain_output:
             # Domain doesn't exist
-            output_file.write(f'{domain}\tNXDOMAIN\n')
+            utils.log_output(f'{domain}\t{NXDOMAIN}\n')
             continue
-        elif 'SERVFAIL' in dig_domain_output:
+        elif SERVFAIL in dig_domain_output:
             # No DNS query answer
-            dig_domain_8_output = run_subprocess(['dig', '@8.8.8.8', domain, '+short'])
-            if 'NXDOMAIN' in dig_domain_8_output:
-                output_file.write(f'{domain}\tNXDOMAIN\n')
+            dig_domain_8_output = utils.run_subprocess(['dig', '@8.8.8.8', domain, '+short'])
+            if NXDOMAIN in dig_domain_8_output:
+                utils.log_output(f'{domain}\t{NXDOMAIN}\n')
                 continue
-            elif 'SERVFAIL' in dig_domain_8_output:
-                output_file.write(f'{domain}\tSERVFAIL\n')
+            elif SERVFAIL in dig_domain_8_output:
+                utils.log_output(f'{domain}\t{SERVFAIL}\n')
                 continue
         
         # Query ns
-        domain_ns_output = run_subprocess(['dig', 'ns', '@8.8.8.8', domain, '+short'])
+        domain_ns_output = utils.run_subprocess(['dig', 'ns', '@8.8.8.8', domain, '+short'])
 
         if domain_ns_output == '':
             continue
@@ -88,37 +91,29 @@ def classify(domain_ns_all: dict) -> Tuple[dict, list]:
 
     for website_domain, ns_list in domain_ns_all.items():
         ns_third = set()
-        print(f"website_domain {website_domain}")
-        website_domain_soa_output = run_subprocess(['dig', 'soa', website_domain, '+short'])
-        print(f"website_domain_soa_output {website_domain_soa_output}")
+        website_domain_soa_output = utils.run_subprocess(['dig', 'soa', website_domain, '+short'])
         website_domain_soa = build_soa(website_domain, website_domain_soa_output)
-        website_cert = get_cert((website_domain, 443),3)
-        
+        website_cert = utils.get_cert((website_domain, 443),3)
+        website_san = get_san(website_cert)
+
         for ns in ns_list:
-            ns_domain_suffix = get_sld_tld(ns)
-            print(ns_domain_suffix)
-            ns_type = Ns_type.Unknown
-            if website_domain == ns_domain_suffix:
-                # 1. sld + tld of ns and website
-                ns_type = Ns_type.Private
-                output_file.write(website_domain + "\t" + ns.rstrip('.') + "\t" + ns_type.name + "\n")
+            ns_domain_suffix = utils.get_sld_tld(ns)
+
+            if website_domain == ns_domain_suffix or (website_san and ns_domain_suffix in website_san):
+                # 1. sld + tld of ns and website and 2. ns in website SAN if supporting HTTPS
+                utils.log_output(f"{website_domain}\t{ns.rstrip('.')}\t{Ns_type.Private.name}\n")
             else:
-                # 2. ns in website SAN if supporting HTTPS
-                
                 # 3. SOA mname of ns and website
-                ns_soa_output = run_subprocess(['dig', 'soa', ns_domain_suffix, '+short'])
+                ns_soa_output = utils.run_subprocess(['dig', 'soa', ns_domain_suffix, '+short'])
                 ns_soa = build_soa(ns, ns_soa_output)
                 if not ns_soa or not website_domain_soa:
                     continue
 
                 ns_soa_all[ns] = ns_soa
-
-                if website_domain_soa['mname'] != ns_soa['mname']:
-                    ns_type = Ns_type.Third_Party
+                if website_domain_soa[MNAME] != ns_soa[MNAME]:
                     ns_third.add(ns)
                     ns_soa_third.append(ns_soa)
-
-                    output_file.write(website_domain + "\t" + ns.rstrip('.') + "\t" + ns_type.name + "\n")
+                    utils.log_output(f"{website_domain}\t{ns.rstrip('.')}\t{Ns_type.Third_Party.name}\n")
 
             # Record ns and website link to count concentration
             if ns in ns_concentration:
@@ -134,8 +129,18 @@ def classify(domain_ns_all: dict) -> Tuple[dict, list]:
             for website_domain in website_domain_list:
                 website_domain_ns_third[website_domain].add(ns)
                 ns_soa_third.append(ns_soa_all[ns])
+                utils.log_output(f"{website_domain}\t{ns.rstrip('.')}\t{Ns_type.Third_Party.name}\n")
 
     return website_domain_ns_third, ns_soa_third
+
+def get_san(website_cert: dict) -> set:
+    san_set = set()
+    if website_cert:
+        subject_alt_name = website_cert[SUBJECT_ALT_NAME]
+        for san in subject_alt_name:
+            san_set.add(san[1])         
+
+    return san_set
 
 def group(website_domain_ns_third: dict, ns_soa_third: list) -> dict:
     """Group third party nameservers based on their
@@ -156,22 +161,22 @@ def group(website_domain_ns_third: dict, ns_soa_third: list) -> dict:
 
     for i in range(len(ns_soa_third)):
         ns_soa_third_1 = ns_soa_third[i]
-        ns_1 = ns_soa_third_1['domain']
+        ns_1 = ns_soa_third_1[DOMAIN]
         if ns_1 not in matched:
-            ns_domain_1 = get_sld_tld(ns_1)
+            ns_domain_1 = utils.get_sld_tld(ns_1)
             ns_group[ns_1] = ns_domain_1
             matched.add(ns_1)
 
             for j in range(len(ns_soa_third)):
                 ns_soa_third_2 = ns_soa_third[j]
-                ns_2 = ns_soa_third_2['domain']
+                ns_2 = ns_soa_third_2[DOMAIN]
                 if ns_2 not in matched:
-                    ns_domain_2 = get_sld_tld(ns_2)
+                    ns_domain_2 = utils.get_sld_tld(ns_2)
 
                     # Group ns based on sld+tld, mname, and rname
                     if ns_domain_1 == ns_domain_2 or \
-                        ns_soa_third_1['mname'] == ns_soa_third_2['mname'] or \
-                        ns_soa_third_1['rname'] == ns_soa_third_2['rname']:
+                        ns_soa_third_1[MNAME] == ns_soa_third_2[MNAME] or \
+                        ns_soa_third_1[RNAME] == ns_soa_third_2[RNAME]:
                         ns_group[ns_2] = ns_domain_1
                         matched.add(ns_2)
     
@@ -205,8 +210,7 @@ def build_soa(domain: str, soa_output: str) -> dict:
                 'rname': soa_output_list[1],
             }
     except Exception as e:
-        output_file.write(f"build_soa \t domain {domain} soa_output {soa_output}")
-        output_file.write(e)
+        utils.log_output(f"build_soa \t domain {domain} soa_output {soa_output}. Error: {e}")
 
     return soa_dict
 
@@ -245,15 +249,15 @@ def build_graph(domain_ns_third: dict) -> object:
             
             n_map[n] = n_id
             id_increment += 1
-
+    
+    links = list(links)
     if links:
-        links = list(links)
         id_increment = 1
         for i, l in enumerate(links):
             links[i] = {
                 "id": id_increment,
-                "source": n_map[(l[0], 'Provider')],
-                "target": n_map[(l[1], 'Client')],
+                "source": n_map[(l[0], Node_type.Provider.name)],
+                "target": n_map[(l[1], Node_type.Client.name)],
                 "label": 'DNS',
             }
             id_increment += 1
@@ -266,20 +270,13 @@ def build_graph(domain_ns_third: dict) -> object:
     return graph
 
 def main():
-    # Output file accessible globally
-    global output_file
-
     # Path to the websites list file
     website_list_path = sys.argv[1]
 
     # Top n websites for measurement and analysis
     top_n = int(sys.argv[2])
 
-    timestr = time.strftime('%m%d-%H%M')
     website_list_file = open(website_list_path, 'r')
-    output_file = open(f'./outputs/{timestr}', 'w')
-    graph_file = open(f'./outputs/graphs/{timestr}.json', 'w')
-    graph_file_dup = open('../static-frontend/data/graphData.json', 'w')
 
     # Measure/Dig website name servers
     domain_ns_all = measure(website_list_file, top_n)
@@ -287,8 +284,8 @@ def main():
     website_domain_ns_third_group = group(website_domain_ns_third, ns_soa_all)
     graph = build_graph(website_domain_ns_third_group)
 
-    graph_file.write(json.dumps(graph, indent=4))
-    graph_file_dup.write(json.dumps(graph, indent=4))
+    config.graph_file.write(json.dumps(graph, indent=4))
+    config.graph_file_dup.write(json.dumps(graph, indent=4))
 
 
 if __name__ == "__main__":
