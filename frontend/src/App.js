@@ -7,36 +7,8 @@ import { Error, Graph, Home } from './views'
 import { useStoreState, useStoreActions } from 'easy-peasy'
 
 const App = () => {
-  const theme = useStoreState(state => state.theme)
-  const toggleTheme = useStoreActions(actions => actions.toggleTheme)
-
-  useEffect(() => {
-    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-      toggleTheme('dark')
-    }
-
-    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
-      const newColorScheme = e.matches ? 'dark' : 'light';
-      toggleTheme(newColorScheme)
-    });
-
-    return () => {
-      window.removeEventListener('change',  e => {
-        const newColorScheme = e.matches ? 'dark' : 'light';
-        toggleTheme(newColorScheme)
-      });
-    }
-  }, [])
-
-  const myTheme = {
-    "type": theme,
-    "layout": {
-      "pageWidth": "2400pt"
-    }
-  }
-
   return (
-    <GeistProvider themes={[myTheme]} themeType={theme}>
+    <GeistProvider>
       <CssBaseline />
       <Page style={{width: "100%"}}>
         <NavBar />

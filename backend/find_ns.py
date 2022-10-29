@@ -120,8 +120,9 @@ def classify(domain_ns_all: dict) -> Tuple[dict, list]:
                 ns_concentration[ns].append(website_domain)
             else:
                 ns_concentration[ns] = [website_domain]
-
-        website_domain_ns_third[website_domain] = ns_third
+                
+        if ns_third:
+            website_domain_ns_third[website_domain] = ns_third
 
     # 4. ns concentration >= 50
     for ns, website_domain_list in ns_concentration.items():
