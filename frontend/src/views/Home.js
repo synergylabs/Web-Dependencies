@@ -8,7 +8,7 @@ const Home = () => {
     const setDnsData = useStoreActions(actions => actions.setDnsData)
 	return (
         <>
-            <Text h5>Click any one of the services above to view their respective graphs</Text>
+            <Text h5>Welcome to Web Dependencies home page!</Text>
         </>
 	)
 }

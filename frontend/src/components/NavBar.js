@@ -1,41 +1,23 @@
 import React from 'react';
 import { Link } from 'react-router-dom'
-import { Row, Col, Divider, Button, Text, Spacer } from '@geist-ui/react'
+import { Tabs, Row, Col, Divider, Button, Text, Spacer } from '@geist-ui/react'
 import { Globe, Server } from '@geist-ui/react-icons'
 import { useStoreState, useStoreActions } from 'easy-peasy'
+import { useHistory, useLocation } from 'react-router-dom';
 
 const NavBar = () => {
-    const service = useStoreState(state => state.service)
-    const changeService = useStoreActions(actions => actions.changeService)
-    const toggleNodeDetails = useStoreActions(actions => actions.toggleNodeDetails)
-
-    const changeServiceHandler = (e) => {
-        let service = e.target.innerText
-        if (service != null) {
-            if (service == 'Web Dependencies') service = ''
-            changeService(service)
-            toggleNodeDetails(false)
-        }
-    }
+    const location = useLocation();
+    const history = useHistory();
     
     return (
         <>
-            <Row gap={.8} align="middle">
-                <Col span={6}>
-                    <Link to='/' onClick={(e) => changeServiceHandler(e)}><Text h3>Web Dependencies</Text></Link>
-                </Col>
-                <Col span={17}>
-                    <Row justify="end">
-                        <Link to='/dns' style={{ marginRight: '15px' }}>
-                            <Button auto type={ service == 'dns' ? 'success-light' : '' } onClick={(e) => changeServiceHandler(e)}><Globe /><Spacer x={1} inline />DNS</Button>
-                        </Link>
-                        <Link to='/cdn' style={{ marginRight: '15px' }}>
-                            <Button auto type={ service == 'cdn' ? 'success-light' : '' } onClick={(e) => changeServiceHandler(e)}><Server /><Spacer x={1} inline />CDN</Button>
-                        </Link>
-                    </Row>
-                </Col>
-            </Row>
-            <Divider style={{ marginBottom: '15px' }} />
+            <Tabs value={location.pathname} onChange={(route) => history.push(route)}>
+                <Tabs.Item label="Home" value="/" />
+                <Tabs.Item label="DNS" value="/dns" />
+                <Tabs.Item label="CDN" value="/cdn" />
+                <Tabs.Item label="CA" value="/ca" />
+                <Tabs.Item label="About" value="/about" />
+            </Tabs>
         </>
     )
 }

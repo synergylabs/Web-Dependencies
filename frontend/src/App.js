@@ -1,22 +1,24 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import './App.css';
-import { GeistProvider, CssBaseline, Page, Text } from '@geist-ui/react'
+import { GeistProvider, CssBaseline, Page } from '@geist-ui/react'
 import { Switch, Route } from "react-router-dom";
 import { NavBar } from "./components";
-import { Error, Graph, Home } from './views'
-import { useStoreState, useStoreActions } from 'easy-peasy'
+import { Error, Graph, Home, About } from './views'
 
 const App = () => {
   return (
     <GeistProvider>
       <CssBaseline />
-      <Page style={{width: "100%"}}>
+      <Page>
         <NavBar />
         <Switch>
-          <Route path={["/dns", "/cdn"]}>
+          <Route path="/about">
+            <About />
+          </Route>
+          <Route path={["/dns", "/cdn", "/ca"]}>
             <Graph />
           </Route>
-          <Route path='/'>
+          <Route path="/">
             <Home />
           </Route>
           <Route component={Error} />
