@@ -11,7 +11,8 @@ const NavBar = () => {
     
     return (
         <>
-            <Tabs value={location.pathname} onChange={(route) => history.push(route)}>
+            <Link to='/'><Text h3>Web Dependencies</Text></Link>
+            <Tabs value={location.pathname} onChange={(route) => history.push(route)} hoverHeightRatio={5}>
                 <Tabs.Item label="Home" value="/" />
                 <Tabs.Item label="DNS" value="/dns" />
                 <Tabs.Item label="CDN" value="/cdn" />

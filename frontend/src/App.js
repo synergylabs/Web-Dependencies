@@ -9,9 +9,12 @@ const App = () => {
   return (
     <GeistProvider>
       <CssBaseline />
-      <Page>
-        <NavBar />
-        <Switch>
+      <Page style={{width: "80%"}}>
+        <Page.Header>
+          <NavBar />
+        </Page.Header>
+        <Page.Content>
+          <Switch>
           <Route path="/about">
             <About />
           </Route>
@@ -23,6 +26,10 @@ const App = () => {
           </Route>
           <Route component={Error} />
         </Switch>
+        </Page.Content>
+        <Page.Footer>
+          <h2>Footer</h2>
+        </Page.Footer>
       </Page>
     </GeistProvider>
   );

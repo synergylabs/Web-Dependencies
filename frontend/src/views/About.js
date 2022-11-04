@@ -5,7 +5,7 @@ import { Text, Spacer, Select } from '@geist-ui/react'
 const About = () => {
 	return (
         <>
-            <Text h5>About us</Text>
+            <Text h2>About us</Text>
         </>
 	)
 }
