@@ -15,8 +15,8 @@ const NavBar = () => {
             <Tabs value={location.pathname} onChange={(route) => history.push(route)} hoverHeightRatio={5}>
                 <Tabs.Item label="Home" value="/" />
                 <Tabs.Item label="DNS" value="/dns" />
-                <Tabs.Item label="CDN" value="/cdn" />
-                <Tabs.Item label="CA" value="/ca" />
+                {/* <Tabs.Item label="CDN" value="/cdn" />
+                <Tabs.Item label="CA" value="/ca" /> */}
                 <Tabs.Item label="About" value="/about" />
             </Tabs>
         </>

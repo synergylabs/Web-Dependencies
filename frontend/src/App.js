@@ -18,7 +18,7 @@ const App = () => {
           <Route path="/about">
             <About />
           </Route>
-          <Route path={["/dns", "/cdn", "/ca"]}>
+          <Route path={["/dns"]}>
             <Graph />
           </Route>
           <Route path="/">
