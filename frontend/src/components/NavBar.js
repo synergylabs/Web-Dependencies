@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom'
-import { Tabs, Row, Col, Divider, Button, Text, Spacer } from '@geist-ui/react'
+import { Tabs, Text } from '@geist-ui/react'
 import { Globe, Server } from '@geist-ui/react-icons'
 import { useStoreState, useStoreActions } from 'easy-peasy'
 import { useHistory, useLocation } from 'react-router-dom';

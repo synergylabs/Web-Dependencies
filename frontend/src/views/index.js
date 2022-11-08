@@ -1,7 +1,6 @@
 import Error from './Error'
-import Graph from './Graph'
 import Home from './Home'
 import About from './About'
-import DependencyGraph from './DependencyGraph'
+import Dashboard from './dashboard/Dashboard'
 
-export { About, DependencyGraph, Error, Graph, Home };
+export { About, Dashboard, Error, Home };

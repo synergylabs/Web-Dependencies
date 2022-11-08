@@ -19,7 +19,7 @@ const store = createStore(persist({
     setTerm: action((state, payload) => {
         state.searchTerm = String(payload).toLowerCase()
     }),
-    nodeDetails: null,
+    nodeDetails: [],
     setNodeDetails: action((state, payload) => {
         state.nodeDetails = payload
     }),
