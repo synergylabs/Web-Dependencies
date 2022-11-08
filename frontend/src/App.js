@@ -3,7 +3,7 @@ import './App.css';
 import { GeistProvider, CssBaseline, Page } from '@geist-ui/react'
 import { Switch, Route } from "react-router-dom";
 import { NavBar } from "./components";
-import { Error, Graph, Home, About } from './views'
+import { About, DependencyGraph, Error, Home } from './views'
 
 const App = () => {
   return (
@@ -19,7 +19,7 @@ const App = () => {
             <About />
           </Route>
           <Route path={["/dns"]}>
-            <Graph />
+            <DependencyGraph />
           </Route>
           <Route path="/">
             <Home />
