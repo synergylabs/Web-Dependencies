@@ -16,8 +16,8 @@ const store = createStore(persist({
         state.searchTerm = ''
     }),
     searchTerm: '',
-    setTerm: action((state, payload) => {
-        state.searchTerm = String(payload).toLowerCase()
+    setSearchTerm: action((state, payload) => {
+        state.searchTerm = payload
     }),
     nodeDetails: [],
     setNodeDetails: action((state, payload) => {
