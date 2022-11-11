@@ -7,32 +7,25 @@ import { withSize } from 'react-sizeme'
 const Graph = (props) => {
     const fgRef = useRef();
 
-    const nodeColor = n => {
-        if (n.nodeType == 'Client') {
-            return Config.ClientColor
-        } else {
-            return Config.ProviderColor
-        }
-    }
-
     useEffect(() => {
         const fg = fgRef.current;
-        fg.d3Force('charge', d3.forceManyBody().strength(-3));
-        fg.d3Force('collide', d3.forceCollide(d => {
-            return d.val * 0.75
-        }));
+        fg.d3Force('charge', d3.forceManyBody().strength(-4));
+        fg.d3Force('collide', d3.forceCollide(d => d.val * 1.3));
     }, []);
 
     return (
         <ForceGraph2D 
             ref={fgRef}
             graphData={props.graphData}
-            minZoom={0.2}
+            minZoom={0.05}
             width={props.size.width}
             nodeLabel="label"
-            nodeRelSize={6}
-            nodeColor={nodeColor}
+            nodeRelSize={4}
+            nodeColor={n => n.nodeType == 'Client' ? Config.ClientColor : Config.ProviderColor}
+            nodeVal={n => n.nodeType == 'Client' ? n.val : n.val * 2}
+            linkWidth={0.3}
             onNodeClick={props.onNodeClick}
+            onBackgroundClick={props.clearSearch}
         />
     )
 };

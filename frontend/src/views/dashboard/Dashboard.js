@@ -38,6 +38,10 @@ const Dashboard = () => {
         }
     }
 
+    const clearSearch = e => {
+        setNodeDetails([])
+        setSearchTerm('')
+    }
     const onNodeClick = node => {
         setNodeDetails([])
         setSearchTerm('')
@@ -76,6 +80,7 @@ const Dashboard = () => {
                             <Card shadow width="100%" >
                                 <NodeSearch 
                                     onSearchInputChange={onSearchByLabel}
+                                    onClearClick={clearSearch}
                                 />
                             </Card>
                         </Grid> 
@@ -84,8 +89,9 @@ const Dashboard = () => {
                 <Grid xs={16}>
                     <Card shadow width="100%" >
                         <Graph 
-                            onNodeClick={onNodeClick}
                             graphData={dataToShow}
+                            clearSearch={clearSearch}
+                            onNodeClick={onNodeClick}
                         />
                     </Card>
                 </Grid>

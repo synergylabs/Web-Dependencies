@@ -22,10 +22,6 @@ const NodeSearch = (props) => {
         )
     })
 
-    const onClearClick = () => {
-        setNodeDetails([])
-    }
-
 	return (
         <>
             <Text h5>Search or click on a node for details</Text>
@@ -34,7 +30,7 @@ const NodeSearch = (props) => {
                 placeholder="Search..."
                 value={searchTerm}
                 onChange={props.onSearchInputChange}
-                onClearClick={onClearClick}
+                onClearClick={props.onClearClick}
                 clearable
             />
             <Spacer />
