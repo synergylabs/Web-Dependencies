@@ -1,8 +1,10 @@
+from io import TextIOWrapper
 import socket
 import ssl
 import subprocess
 import tldextract
 import config
+from constants import Ns_type
 
 def run_subprocess(command: list) -> str:
     """Run subprocess with the input command"""
@@ -11,7 +13,7 @@ def run_subprocess(command: list) -> str:
         output = subprocess.check_output(command)
         output = str(output, 'utf-8')
     except subprocess.CalledProcessError as e:
-        config.output_file.write(e.output)
+        log_error(str(e.output))
 
     return output
 
@@ -39,12 +41,30 @@ def get_cert(addr, timeout=None) -> dict:
         context = ssl.create_default_context()
         sslsock = context.wrap_socket(sock, server_hostname=addr[0])
         cert = sslsock.getpeercert()
-    except ssl.CertificateError as e:           
-        config.output_file.write(addr[0] + ":ssl-certificate-error" + str(e) + "\n")
+    except ssl.CertificateError as e:  
+        log_error(f'{addr[0]}:ssl-certificate-error{str(e)}\n')         
     except socket.error as e:
-        config.output_file.write(addr[0] + ":socket-error" + str(e) + "\n")
+        log_error(f'{addr[0]}:socket-error{str(e)}\n')  
     
     return cert
 
-def log_output(message: str):
-    config.output_file.write(message)
+def build_node_and_type(label: str, type: str):
+    return f'{label}:{type}'
+
+def log_measurement_result(message: str):
+    log_result(config.measurment_result_file, message)
+
+def log_classify_result(message: str):
+    log_result(config.classify_result_file, message)
+
+def log_group_result(message: str):
+    log_result(config.group_result_file, message)
+
+def log_graph_result(message: str):
+    log_result(config.graph_result_file, message)
+
+def log_error(message: str):
+    log_result(config.error_file, message)
+
+def log_result(result_file: TextIOWrapper, message: str):
+    result_file.write(message)
