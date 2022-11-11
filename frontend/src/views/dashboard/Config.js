@@ -1,5 +1,5 @@
 const Config = {
-    ClientColor: '#000000',
+    ClientColor: '#003366',
     ProviderColor: '#6495ED',
 }
 
