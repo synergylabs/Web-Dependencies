@@ -9,34 +9,39 @@ const Dashboard = () => {
     const setSearchTerm = useStoreActions(actions => actions.setSearchTerm)
 
     const dnsData = require('../../data/dns.json')
-    const dataToShow = filterDataToShow(dnsData)
+
+    const dataToShow = dnsData
 
     // Don't display providers with only one client
-    function filterDataToShow({nodes, links}) {
-        const nodeToRemove = new Set()
-        let newNodes = nodes
-        const newLinks = links.filter(link => {
-            const sourceId = link.source
-            const sourceIndex = Number(sourceId.substr(1))
-            const sourceNode = newNodes[sourceIndex-1]
-            const targetId = link.target
-            const targetIndex = Number(targetId.substr(1))
-            const targetNode = newNodes[targetIndex-1]
+    // function filterDataToShow({nodes, links}) {
+    //     console.log(links)
+    //     const nodeToRemove = new Set()
+    //     let newNodes = nodes
+    //     const newLinks = links.filter(link => {
+            
+    //         const sourceId = link.source
+    //         console.log(sourceId)
+    //         const sourceIndex = Number(sourceId.substr(1))
+    //         const sourceNode = newNodes[sourceIndex-1]
+    //         const targetId = link.target
+    //         const targetIndex = Number(targetId.substr(1))
+    //         const targetNode = newNodes[targetIndex-1]
+    //         console.log(sourceNode)
+    //         console.log(targetNode)
+    //         if (sourceNode.count == 1 && targetNode.count == 1) {
+    //             nodeToRemove.add(sourceId)
+    //             nodeToRemove.add(targetId)
+    //             return false;
+    //         }
+    //         return true
+    //     });
+    //     newNodes = newNodes.filter(n => !nodeToRemove.has(n.id))
 
-            if (sourceNode.count == 1 && targetNode.count == 1) {
-                nodeToRemove.add(sourceId)
-                nodeToRemove.add(targetId)
-                return false;
-            }
-            return true
-        });
-        newNodes = newNodes.filter(n => !nodeToRemove.has(n.id))
-
-        return {
-            nodes: newNodes,
-            links: newLinks,
-        }
-    }
+    //     return {
+    //         nodes: newNodes,
+    //         links: newLinks,
+    //     }
+    // }
 
     const clearSearch = e => {
         setNodeDetails([])
