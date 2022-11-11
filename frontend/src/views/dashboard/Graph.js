@@ -17,9 +17,9 @@ const Graph = (props) => {
 
     useEffect(() => {
         const fg = fgRef.current;
-        fg.d3Force('charge', d3.forceManyBody().strength(-0.5));
+        fg.d3Force('charge', d3.forceManyBody().strength(-3));
         fg.d3Force('collide', d3.forceCollide(d => {
-            return d.val * 0.85
+            return d.val * 0.75
         }));
     }, []);
 
@@ -30,6 +30,7 @@ const Graph = (props) => {
             minZoom={0.2}
             width={props.size.width}
             nodeLabel="label"
+            nodeRelSize={6}
             nodeColor={nodeColor}
             onNodeClick={props.onNodeClick}
         />
