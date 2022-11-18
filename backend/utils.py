@@ -1,10 +1,11 @@
-from io import TextIOWrapper
 import socket
 import ssl
 import subprocess
+import datetime
 import tldextract
 import config
-from constants import Ns_type
+from io import TextIOWrapper
+
 
 def run_subprocess(command: list) -> str:
     """Run subprocess with the input command"""
@@ -48,8 +49,14 @@ def get_cert(addr, timeout=None) -> dict:
     
     return cert
 
-def build_node_and_type(label: str, type: str):
-    return f'{label}:{type}'
+def get_last_month():
+    today = datetime.date.today()
+    first = today.replace(day=1)
+    last_month = first - datetime.timedelta(days=1)
+    return last_month.strftime("%Y%m")
+
+def build_node_and_type(label: str, node_type: str):
+    return f'{label}:{node_type}'
 
 def log_measurement_result(message: str):
     log_result(config.measurment_result_file, message)

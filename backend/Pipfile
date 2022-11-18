@@ -6,6 +6,8 @@ name = "pypi"
 [packages]
 tldextract = "*"
 icecream = "*"
+google-cloud-bigquery = "*"
+boxsdk = "*"
 
 [dev-packages]
 
