@@ -1,6 +1,6 @@
 const Config = {
     ClientColor: '#003366',
-    ProviderColor: '#6495ED',
+    ProviderColor: '#F44336',
 }
 
 export default Config

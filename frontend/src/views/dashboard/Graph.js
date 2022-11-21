@@ -9,8 +9,10 @@ const Graph = (props) => {
 
     useEffect(() => {
         const fg = fgRef.current;
-        fg.d3Force('charge', d3.forceManyBody().strength(-4));
-        fg.d3Force('collide', d3.forceCollide(d => d.val * 1.3));
+        fg.d3Force('charge', d3.forceManyBody());
+        fg.d3Force('collide', d3.forceCollide(d => d.val));
+        fg.d3Force('x', d3.forceX());
+        fg.d3Force('y', d3.forceY());
     }, []);
 
     return (
@@ -20,9 +22,9 @@ const Graph = (props) => {
             minZoom={0.05}
             width={props.size.width}
             nodeLabel="label"
-            nodeRelSize={4}
+            nodeRelSize={2}
             nodeColor={n => n.nodeType == 'Client' ? Config.ClientColor : Config.ProviderColor}
-            nodeVal={n => n.nodeType == 'Client' ? n.val : n.val * 2}
+            nodeVal={n => n.nodeType == 'Client' ? n.val : n.val ** 2 / 10}
             linkWidth={0.3}
             onNodeClick={props.onNodeClick}
             onBackgroundClick={props.clearSearch}
