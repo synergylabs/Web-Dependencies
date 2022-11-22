@@ -3,12 +3,33 @@
 
 from utils import get_last_month
 from google.cloud import bigquery
+import tldextract
+
+
+
+def preprocess_crux(results):
+    websites = {}
+    for row in results:
+        rank = row.rank
+        link = row.origin
+        link = tldextract.extract(link)
+        domain = link.domain + "." + link.suffix
+        subdomain = None
+        if(link.subdomain != ""):
+            subdomain = link.subdomain + "." + domain
+        if(domain not in websites):
+            websites[domain] = {}
+            websites[domain]["rank"] = []
+            websites[domain]["subdomains"] = []
+        websites[domain]["rank"].append(rank)
+        if(subdomain):
+            websites[domain]["subdomains"].append(subdomain)
+    return websites
+
+
 
 def query_crux():
-    last_month = get_last_month()
-    country = 'us'
-    crux_output_filename = f'crux-{last_month}'
-    crux_output_file = open(f'./crux/{crux_output_filename}', 'w')
+
 
     client = bigquery.Client()
     query = f"""
@@ -20,10 +41,19 @@ def query_crux():
     """
     query_job = client.query(query)
     results = query_job.result()  # Waits for job to complete.
+    return results
+    
 
-    for row in results:
-        crux_output_file.write(f'{row.rank},{row.origin}\n')
 
+def extract_crux_file(country, month):
+    crux_output_filename = f'crux-{month}'
+    crux_output_file = open(f'./crux/{crux_output_filename}', 'w')
+    results = query_crux(month,country)
+    websites = preprocess_crux(results)
+    
+    for w,details in websites.items():
+        rank = min(details["rank"])
+        subdomains = ";".join(details["subdomains"])
+        crux_output_file.write(f"{rank},{w},{subdomains}\n")
 
-if __name__ == "__main__":
-    query_crux()
+    crux_output_file.close()

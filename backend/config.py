@@ -3,6 +3,8 @@ import time
 
 timestr = time.strftime('%m%d-%H%M')
 
+san_lib_filename: str = f'./lib/san-lib-{timestr}'
+soa_lib_filename: str = f'./lib/soa-lib-{timestr}'
 measurement_result_filename: str = f'./outputs/measurement-result-{timestr}'
 classify_result_filename: str = f'./outputs/classify-result-{timestr}'
 group_result_filename: str = f'./outputs/group-result-{timestr}'
@@ -17,4 +19,3 @@ error_file: TextIOWrapper = open(error_filename, 'w')
 
 output_file = open(f'./outputs/{timestr}', 'w')
 graph_file = open(f'./outputs/graphs/{timestr}.json', 'w')
-graph_file_dup = open('../static-frontend/data/graphData.json', 'w')

@@ -4,7 +4,40 @@ import subprocess
 import datetime
 import tldextract
 import config
+import socket
 from io import TextIOWrapper
+
+def isIP(ip):
+    try:
+        socket.inet_aton(ip)
+        return True
+    except socket.error:
+        return False
+
+
+
+def read_san_lib(san_lib_file: str) -> list:
+    domain_san = []
+    f = open(san_lib_file,"r")
+    for line in f:
+        line = line.strip().lower()
+        details = line.split(",")
+        domain_san.append(details)
+        
+        # domain_soa[domain] = (details[1].lower(),details[2].lower())
+    return domain_san
+
+
+def read_soa_lib(soa_lib_file: str) -> dict:
+    domain_soa = {}
+    f = open(soa_lib_file,"r")
+    for line in f:
+        # print(line)
+        line = line.strip()
+        details = line.split(",")
+        domain = details[0].lower()
+        domain_soa[domain] = (details[1].lower(),details[2].lower())
+    return domain_soa
 
 
 def run_subprocess(command: list) -> str:
