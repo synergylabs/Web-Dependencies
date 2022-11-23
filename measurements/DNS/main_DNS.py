@@ -1,15 +1,13 @@
-
 import sys
-import utils
-from measure_DNS import *
-from classify_DNS import *
-from group_DNS import *
+# import utils
+from .measure_DNS import measure
+from .classify_DNS import classify
+from .group_DNS import group
 
 import json
 
 def find_DNS_dep(website_list_path,start,top_n):
-    
-    website_list_file = open(website_list_path, 'r')
+    website_list_file = open(website_list_path, "r")
 
     # Measure/Dig website name servers
     domain_ns_all = measure(website_list_file, start, top_n)
@@ -18,9 +16,6 @@ def find_DNS_dep(website_list_path,start,top_n):
     print(website_domain_ns_third)
     website_domain_ns_third_group = group(website_domain_ns_third, ns_soa_third)
     print(website_domain_ns_third_group)
-    # graph = build_graph(website_domain_ns_third_group)
-
-    # utils.log_graph_result(json.dumps(graph, indent=4))
 
 def main():
     # Path to the websites list file
