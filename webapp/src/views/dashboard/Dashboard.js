@@ -1,8 +1,8 @@
 import React from 'react'
 import { Card, Grid, Text } from '@geist-ui/react'
+import { useStoreState, useStoreActions } from 'easy-peasy'
 import Graph from './Graph';
 import NodeSearch from './NodeSearch';
-import { useStoreState, useStoreActions } from 'easy-peasy'
 
 const Dashboard = () => {
     const setNodeDetails = useStoreActions(actions => actions.setNodeDetails)
