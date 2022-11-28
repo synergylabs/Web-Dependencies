@@ -93,13 +93,14 @@ function Search(props) {
   const { searchTerm, searchResult, onSearchInputChange } = props;
 
   const searchResultList = searchResult.map((node) => {
-    const color = node.nodeType === "Provider" ? Config.ProviderColor : Config.ClientColor;
-    const letterAvatar = node.nodeType === "Provider" ? "P" : "C";
-    const valType = node.nodeType === "Provider" ? "Concentration" : "Dependency"
+    const isProvider = node.nodeType === "Provider";
+    const color = isProvider ? Config.ProviderColor : Config.ClientColor;
+    const letterAvatar = isProvider ? "P" : "C";
+    const valType = isProvider ? "Concentration" : "Dependency"
 
     return (
       <>
-        <ListItem alignItems="flex-start" mb={3}>
+        <ListItem alignItems="flex-start" mb={3} key={node.id}>
           <ListItemAvatar>
             <Avatar sx={{ bgcolor: color }}>{letterAvatar}</Avatar>
           </ListItemAvatar>
@@ -107,13 +108,17 @@ function Search(props) {
             primary={node.label}
             secondary={<React.Fragment>
               <Typography
-                sx={{ display: 'inline' }}
-                component="span"
                 variant="body2"
                 color={color}
               >
                 {`${valType}: ${node.val}`}
               </Typography>
+              {isProvider && <Typography
+                variant="body2"
+                color={color}
+              >
+                {`Impact: ${node.impact.length}`}
+              </Typography>}
             </React.Fragment>}
           />
         </ListItem>
