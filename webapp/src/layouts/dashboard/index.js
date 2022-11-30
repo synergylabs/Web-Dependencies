@@ -17,32 +17,26 @@ import { useState } from "react";
 
 // @mui material components
 import Card from "@mui/material/Card";
+import CardContent from '@mui/material/CardContent';
 import Grid from "@mui/material/Grid";
+import Typography from '@mui/material/Typography';
 
 // Material Dashboard 2 React components
 import MDBox from "components/MDBox";
+import MDTypography from "components/MDTypography";
 
 // Material Dashboard 2 React example components
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
-import ReportsBarChart from "examples/Charts/BarCharts/ReportsBarChart";
-import ReportsLineChart from "examples/Charts/LineCharts/ReportsLineChart";
-import ComplexStatisticsCard from "examples/Cards/StatisticsCards/ComplexStatisticsCard";
 
-// Data
-import reportsBarChartData from "layouts/dashboard/data/reportsBarChartData";
-import reportsLineChartData from "layouts/dashboard/data/reportsLineChartData";
 
 // Dashboard components
-// import Projects from "layouts/dashboard/components/Projects";
-// import OrdersOverview from "layouts/dashboard/components/OrdersOverview";
 import Graph from "layouts/dashboard/components/DependencyGraph/Graph";
 import Search from "layouts/dashboard/components/DependencyGraph/Search";
-// import data from "layouts/dashboard/components/DependencyGraph/data/dns.json";
+
 import raw from "data/dns-us-202210";
 import nsProvider from "data/nsProvider.json";
-import { ContactSupportOutlined } from "@mui/icons-material";
 
 const top_n = 5;
 const getTop5Providers = (nodes) => {
@@ -53,36 +47,55 @@ const getTop5Providers = (nodes) => {
 const getGraph = (text) => {
   const nodes = [];
   const links = [];
+  const allClients = new Set();
   const criticalClients = new Set();
+  const redundantClients = new Set();
   const providerClients = {};
+  const clientThirdProviders = {};
+  const clientPrivateProviders = new Set();
   const clientIndices = {};
   const providerIndices = {};
+  
   let graph = {};
+  let privateAndThird = 0;
 
   const allData = text.split(/\r?\n/);
   let index = 0;
 
   allData.forEach((oneData) => {
     const line = oneData.split(",");
+    const client = line[1];
+    const provider = line[4] in nsProvider ? nsProvider[line[4]] : line[4];
     const providerType = line[3];
-    if (providerType === "Third") {
+    allClients.add(client);
+
+    if (providerType === "Pvt") {
+      clientPrivateProviders.add(client);
+    }
+    else if (providerType === "Third") {
       const rank = line[0];
-      const client = line[1];
-      const provider = line[2] in nsProvider ? nsProvider[line[2]] : line[4];
+
+      // Critical clients handling
+      if (!clientThirdProviders.hasOwnProperty(client)) {
+        clientThirdProviders[client] = new Set();
+        criticalClients.add(client);
+      }
+      clientThirdProviders[client].add(provider);
+      if (clientThirdProviders[client].size > 1) {
+        criticalClients.delete(client);
+        redundantClients.add(client);
+      }
 
       if (!providerClients.hasOwnProperty(provider)) {
         providerClients[provider] = new Set();
       }
-
       if (!providerClients[provider].has(client)) {
         providerClients[provider].add(client)
 
         if (clientIndices.hasOwnProperty(client)) {
           const clientIndex = clientIndices[client];
           nodes[clientIndex]["val"] = nodes[clientIndex]["val"] + 1;
-          criticalClients.delete(client);
         } else {
-          criticalClients.add(client);
           clientIndices[client] = index;
           nodes.push({
             id: index,
@@ -112,9 +125,14 @@ const getGraph = (text) => {
     }
   });
 
+  clientPrivateProviders.forEach((c) => {
+    if (clientThirdProviders.hasOwnProperty(c)) {
+      privateAndThird += 1;
+    }
+  });
   
   const allNodes = [...nodes];
-  const topProviders = new Set(nodes.sort((n1, n2) => n2.val - n1.val).slice(0, 50).map((n) => n.id));
+  const topProviders = new Set(nodes.sort((n1, n2) => n2.val - n1.val).slice(0, 20).map((n) => n.id));
   const nodeToGraph = [];
 
   for (const p in providerClients) {
@@ -142,12 +160,21 @@ const getGraph = (text) => {
     nodes: nodeToGraph,
     links: links,
   };
-  return [graph, allNodes];
+  return [graph, allNodes, allClients.size, criticalClients.size, redundantClients.size, privateAndThird];
 };
+
+function getPercentage(value, total) {
+  return Math.round(100*value/total);
+}
 
 const Dashboard = () => {
   const [graph, setGraph] = useState({"nodes": [], "links": []});
   const [allNodes, setAllNodes] = useState([]);
+  const [clientNum, setClientNum] = useState(0);
+  const [thirdClientNum, setThirdClientNum] = useState(0);
+  const [criticalNum, setCriticalNum] = useState(0);
+  const [redundantNum, setredundantNum] = useState(0);
+  const [privateAndThirdNum, setPrivateAndThirdNum] = useState(0);
   const [initialResult, setInitialResult] = useState([]);
   const [searchResult, setSearchResult] = useState(initialResult);
   
@@ -155,9 +182,14 @@ const Dashboard = () => {
     fetch(raw)
     .then((r) => r.text())
     .then((text) => {
-      const [graph, allNodes] = getGraph(text);
+      const [graph, allNodes, clientNum, criticalNum, redundantNum, privateAndThirdNum] = getGraph(text);
       setGraph(graph);
       setAllNodes(allNodes);
+      setClientNum(clientNum)
+      setThirdClientNum(allNodes.filter((n) => n.nodeType === "Client").length)
+      setCriticalNum(criticalNum);
+      setredundantNum(redundantNum);
+      setPrivateAndThirdNum(privateAndThirdNum);
       setInitialResult(getTop5Providers(allNodes));
       setSearchResult(getTop5Providers(allNodes));
      
@@ -175,7 +207,7 @@ const Dashboard = () => {
       setSearchResult(resultNodes.slice(0, top_n));
     }
   };
-  
+
   return (
     <DashboardLayout>
       <DashboardNavbar />
@@ -194,108 +226,76 @@ const Dashboard = () => {
             </Grid>
           </Grid>
         </MDBox>
-        {/* <Grid container spacing={3}>
+        <Grid container spacing={3}>
           <Grid item xs={12} md={6} lg={3}>
             <MDBox mb={1.5}>
-              <ComplexStatisticsCard
-                color="dark"
-                icon="weekend"
-                title="Bookings"
-                count={281}
-                percentage={{
-                  color: "success",
-                  amount: "+55%",
-                  label: "than lask week",
-                }}
-              />
+              <Card style={{ backgroundColor: "#b45f06" }} >
+                <CardContent>
+                  <MDTypography color="white">
+                    Third-party Dependency
+                  </MDTypography>
+                  <MDTypography pr={5} display="inline" variant="h1" color="white">
+                    {thirdClientNum.toLocaleString()}
+                  </MDTypography>
+                  <MDTypography display="inline" variant="h3" color="white">
+                      {getPercentage(thirdClientNum, clientNum)}%
+                  </MDTypography>
+                </CardContent>
+              </Card>
+            </MDBox>
+          </Grid>
+          <Grid item xs={12} md={6} lg={3}>
+            <MDBox>
+              <Card style={{ backgroundColor: "#d63232" }}>
+                <CardContent>
+                  <MDTypography color="white">
+                    Critical Dependency
+                  </MDTypography>
+                  <MDTypography pr={5} display="inline" variant="h1" color="white">
+                    {criticalNum.toLocaleString()}
+                  </MDTypography>
+                  <MDTypography display="inline" variant="h3" color="white">
+                      {getPercentage(criticalNum, clientNum)}%
+                  </MDTypography>
+                </CardContent>
+              </Card>
             </MDBox>
           </Grid>
           <Grid item xs={12} md={6} lg={3}>
             <MDBox mb={1.5}>
-              <ComplexStatisticsCard
-                icon="leaderboard"
-                title="Today's Users"
-                count="2,300"
-                percentage={{
-                  color: "success",
-                  amount: "+3%",
-                  label: "than last month",
-                }}
-              />
+              <Card style={{ backgroundColor: "#326a1a" }} >
+                <CardContent>
+                  <MDTypography color="white">
+                    Redundancy
+                  </MDTypography>
+                  <MDTypography pr={5} display="inline" variant="h1" color="white">
+                    {redundantNum}
+                  </MDTypography>
+                  <MDTypography display="inline" variant="h3" color="white">
+                    {getPercentage(redundantNum, clientNum)}%
+                  </MDTypography>
+                </CardContent>
+              </Card>
             </MDBox>
           </Grid>
           <Grid item xs={12} md={6} lg={3}>
             <MDBox mb={1.5}>
-              <ComplexStatisticsCard
-                color="success"
-                icon="store"
-                title="Revenue"
-                count="34k"
-                percentage={{
-                  color: "success",
-                  amount: "+1%",
-                  label: "than yesterday",
-                }}
-              />
+              <Card style={{ backgroundColor: "#0b5394" }}>
+                <CardContent>
+                  <MDTypography color="white">
+                    Private and Third-party
+                  </MDTypography>
+                  <MDTypography pr={5} display="inline" variant="h1" color="white">
+                    {privateAndThirdNum}
+                  </MDTypography>
+                  <MDTypography display="inline" variant="h3" color="white">
+                    {getPercentage(privateAndThirdNum, clientNum)}%
+                  </MDTypography>
+                </CardContent>
+              </Card>
             </MDBox>
           </Grid>
-          <Grid item xs={12} md={6} lg={3}>
-            <MDBox mb={1.5}>
-              <ComplexStatisticsCard
-                color="primary"
-                icon="person_add"
-                title="Followers"
-                count="+91"
-                percentage={{
-                  color: "success",
-                  amount: "",
-                  label: "Just updated",
-                }}
-              />
-            </MDBox>
-          </Grid>
-        </Grid> */}
-        {/* <MDBox mt={4.5}>
-          <Grid container spacing={3}>
-            <Grid item xs={12} md={6} lg={4}>
-              <MDBox mb={3}>
-                <ReportsBarChart
-                  color="info"
-                  title="website views"
-                  description="Last Campaign Performance"
-                  date="campaign sent 2 days ago"
-                  chart={reportsBarChartData}
-                />
-              </MDBox>
-            </Grid>
-            <Grid item xs={12} md={6} lg={4}>
-              <MDBox mb={3}>
-                <ReportsLineChart
-                  color="success"
-                  title="daily sales"
-                  description={
-                    <>
-                      (<strong>+15%</strong>) increase in today sales.
-                    </>
-                  }
-                  date="updated 4 min ago"
-                  chart={sales}
-                />
-              </MDBox>
-            </Grid>
-            <Grid item xs={12} md={6} lg={4}>
-              <MDBox mb={3}>
-                <ReportsLineChart
-                  color="dark"
-                  title="completed tasks"
-                  description="Last Campaign Performance"
-                  date="just updated"
-                  chart={tasks}
-                />
-              </MDBox>
-            </Grid>
-          </Grid>
-        </MDBox> */}
+        </Grid>
       </MDBox>
       <Footer />
     </DashboardLayout>

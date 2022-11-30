@@ -11,7 +11,7 @@ function Graph(props) {
 
   useEffect(() => {
     const fg = fgRef.current;
-    fg.d3Force("charge", d3.forceManyBody().strength(-90));
+    fg.d3Force("charge", d3.forceManyBody().strength(-110));
     fg.d3Force(
       "collide",
       d3.forceCollide((d) => d.val * 1.2)
