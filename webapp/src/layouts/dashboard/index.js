@@ -200,7 +200,7 @@ const Dashboard = (props) => {
   if (country && country !== curCountry ) {
     setcurCountry(country);
     setLoading(true);
-    fetch(`http://localhost:5000/country/${country}/service/dns/month/202210`)
+    fetch(`http://webdependency.andrew.cmu.edu:5000/country/${country}/service/dns/month/202210`)
     .then((r) => r.json())
     .then((response) => {
       const [graph, allNodes, clientNum, thirdNum, criticalNum, redundantNum, privateAndThirdNum] = getGraph(response.data);
