@@ -11,7 +11,7 @@ def home():
 
 
 @app.route("/country/<country>/service/<service>/month/<month>")
-@cross_origin(origins=["http://localhost:8080"])
+@cross_origin(origins=["http://localhost:8080", "http://webdependency.andrew.cmu.edu:8080"])
 def get_file(country, service, month):
     file_content = box_client.get_file(country, service, month)
     return {
