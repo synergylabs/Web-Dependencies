@@ -16,10 +16,11 @@ Coded by www.creative-tim.com
 import { useState } from "react";
 
 // @mui material components
+import Box from '@mui/material/Box';
 import Card from "@mui/material/Card";
 import CardContent from '@mui/material/CardContent';
+import CircularProgress from '@mui/material/CircularProgress';
 import Grid from "@mui/material/Grid";
-import Typography from '@mui/material/Typography';
 
 // Material Dashboard 2 React components
 import MDBox from "components/MDBox";
@@ -34,8 +35,6 @@ import Footer from "examples/Footer";
 // Dashboard components
 import Graph from "layouts/dashboard/components/DependencyGraph/Graph";
 import Search from "layouts/dashboard/components/DependencyGraph/Search";
-
-import raw from "data/dns-us-202210";
 import nsProvider from "data/nsProvider.json";
 
 const top_n = 5;
@@ -124,14 +123,12 @@ const getGraph = (text) => {
   let criticalNum = 0;
   let redundantNum = 0;
   let privateAndThirdNum = 0;
-  let multipleThirdNum = 0;
 
   allKnownClients.forEach((c) => {
     if (!clientUnknownProviders.has(c)) {
       if (clientThirdProviders.hasOwnProperty(c)) {
         if (clientThirdProviders[c].size > 1) {
           redundantNum++;
-          multipleThirdNum++;
         }
       }
       if (clientPrivateProviders.has(c) && clientThirdProviders.hasOwnProperty(c)) {
@@ -185,7 +182,11 @@ function getPercentage(value, total) {
   return Math.round(100*value/total);
 }
 
-const Dashboard = () => {
+const Dashboard = (props) => {
+  const {country} = props;
+
+  const [curCountry, setcurCountry] = useState("");
+  const [loading, setLoading] = useState(false);
   const [graph, setGraph] = useState({"nodes": [], "links": []});
   const [allNodes, setAllNodes] = useState([]);
   const [allClientNum, setAllClientNum] = useState(0);
@@ -196,11 +197,13 @@ const Dashboard = () => {
   const [initialResult, setInitialResult] = useState([]);
   const [searchResult, setSearchResult] = useState(initialResult);
   
-  if (allNodes.length == 0) {
-    fetch(raw)
-    .then((r) => r.text())
-    .then((text) => {
-      const [graph, allNodes, clientNum, thirdNum, criticalNum, redundantNum, privateAndThirdNum] = getGraph(text);
+  if (country && country !== curCountry ) {
+    setcurCountry(country);
+    setLoading(true);
+    fetch(`http://localhost:5000/country/${country}/service/dns/month/202210`)
+    .then((r) => r.json())
+    .then((response) => {
+      const [graph, allNodes, clientNum, thirdNum, criticalNum, redundantNum, privateAndThirdNum] = getGraph(response.data);
       setGraph(graph);
       setAllNodes(allNodes);
       setAllClientNum(clientNum)
@@ -210,10 +213,10 @@ const Dashboard = () => {
       setPrivateAndThirdNum(privateAndThirdNum);
       setInitialResult(getTop5Providers(allNodes));
       setSearchResult(getTop5Providers(allNodes));
-     
+      setLoading(false);
     });
   }
-
+  
   const onSearchByLabel = (e) => {
     setSearchResult(initialResult);
     const term = e.target.value;
@@ -229,6 +232,8 @@ const Dashboard = () => {
   return (
     <DashboardLayout>
       <DashboardNavbar />
+      {loading ?
+      <CircularProgress sx={{ display: 'flex', marginLeft:"48%" }} color="info" size="4rem"/> :
       <MDBox py={3}>
         <MDBox mb={4.5}>
           <Grid container spacing={3}>
@@ -314,8 +319,8 @@ const Dashboard = () => {
             </MDBox>
           </Grid>
         </Grid>
-      </MDBox>
-      <Footer />
+      </MDBox>}
+      {/* <Footer /> */}
     </DashboardLayout>
   );
 };
