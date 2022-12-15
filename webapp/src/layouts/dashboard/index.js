@@ -35,7 +35,7 @@ import Footer from "examples/Footer";
 // Dashboard components
 import Graph from "layouts/dashboard/components/DependencyGraph/Graph";
 import Search from "layouts/dashboard/components/DependencyGraph/Search";
-import nsProvider from "data/nsProvider.json";
+import { getDnsGraphStats, getCdnGraphStats, getCaGraphStats } from "./graphStatsHelper"
 
 const top_n = 5;
 const getTop5Providers = (nodes) => {
@@ -43,140 +43,16 @@ const getTop5Providers = (nodes) => {
   return nodes.slice(0, top_n);
 };
 
-const getGraph = (text) => {
-  const nodes = [];
-  const links = [];
-  const allKnownClients = new Set();
-  const providerClients = {};
-  const clientThirdProviders = {};
-  const clientPrivateProviders = new Set();
-  const clientUnknownProviders = new Set();
-  const clientIndices = {};
-  const providerIndices = {};
-
-  const allData = text.split(/\r?\n/).filter((d) => d);
-  let index = 0;
-
-  allData.forEach((oneData) => {
-    const line = oneData.split(",");
-    const client = line[1];
-    const providerType = line[3];
-    const provider = line[4];
-    
-    if (providerType === "Pvt") {
-      clientPrivateProviders.add(client);
-      allKnownClients.add(client);
-    } else if (providerType === "unknown") {
-      clientUnknownProviders.add(client);
-    }
-    else if (providerType === "Third") {
-      allKnownClients.add(client);
-      const rank = line[0];
-
-      if (!clientThirdProviders.hasOwnProperty(client)) {
-        clientThirdProviders[client] = new Set();
-      }
-      if (!providerClients.hasOwnProperty(provider)) {
-        providerClients[provider] = new Set();
-      }
-
-      clientThirdProviders[client].add(provider);
-      
-      if (!providerClients[provider].has(client)) {
-        providerClients[provider].add(client)
-
-        if (clientIndices.hasOwnProperty(client)) {
-          const clientIndex = clientIndices[client];
-          nodes[clientIndex]["val"] = nodes[clientIndex]["val"] + 1;
-        } else {
-          clientIndices[client] = index;
-          nodes.push({
-            id: index,
-            rank: rank,
-            label: client,
-            nodeType: "Client",
-            val: 1,
-          });
-          index += 1;
-        }
-
-        if (providerIndices.hasOwnProperty(provider)) {
-          const providerIndex = providerIndices[provider];
-          nodes[providerIndex]["val"] = nodes[providerIndex]["val"] + 1;
-        } else {
-          providerIndices[provider] = index;
-          nodes.push({
-            id: index,
-            label: provider in nsProvider ? nsProvider[provider] : provider,
-            nodeType: "Provider",
-            val: 1,
-            impact: [],
-          });
-          index += 1
-        }
-      }
-    }
-  });
-
-  // Client centric stats
-  let thirdOnlyNum = 0;
-  let criticalNum = 0;
-  let redundantNum = 0;
-  let privateAndThirdNum = 0;
-
-  allKnownClients.forEach((c) => {
-    if (!clientUnknownProviders.has(c)) {
-      if (clientThirdProviders.hasOwnProperty(c)) {
-        if (clientThirdProviders[c].size > 1) {
-          redundantNum++;
-        }
-      }
-      if (clientPrivateProviders.has(c) && clientThirdProviders.hasOwnProperty(c)) {
-        privateAndThirdNum++;
-        redundantNum++;
-      } else if (clientThirdProviders.hasOwnProperty(c)) {
-        thirdOnlyNum++;
-  
-        if (clientThirdProviders[c].size == 1) {
-          criticalNum++;
-        }
-      }
-    }
-  });
-
-  // Provider centric graph
-  const allNodes = [...nodes];
-  const topProviders = new Set(nodes.sort((n1, n2) => n2.val - n1.val).slice(0, 15).map((n) => n.id));
-  const nodeToGraph = [];
-
-  for (const p in providerClients) {
-    const curClients = providerClients[p];
-    const providerIndex = providerIndices[p];
-    if (topProviders.has(providerIndex)) {
-      nodeToGraph.push(allNodes[providerIndex]);
-    }
-    curClients.forEach((c) => {
-      if (clientThirdProviders[c].size == 1) {
-        allNodes[providerIndex]["impact"].push(c);
-      }
-      if (topProviders.has(providerIndex)) {
-        const clientIndex = clientIndices[c];
-        nodeToGraph.push(allNodes[clientIndex]);
-        links.push({
-          source: providerIndex,
-          target: clientIndex,
-        });
-      }
-    })
+const getGraphStats = (text, service) => {
+  if (service === "dns") {
+    return getDnsGraphStats(text);
+  } else if (service === "cdn") {
+    console.log(text)
+    return getCdnGraphStats(text);
+  } else {
+    return getCaGraphStats(text);
   }
-
-  const graph = {
-    nodes: nodeToGraph,
-    links: links,
-  };
-
-  return [graph, allNodes, allKnownClients.size, thirdOnlyNum, criticalNum, redundantNum, privateAndThirdNum];
-};
+}
 
 function getPercentage(value, total) {
   return Math.round(100*value/total);
@@ -186,7 +62,8 @@ const Dashboard = (props) => {
   const {country} = props;
 
   const [curCountry, setcurCountry] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [service, setService] = useState("dns")
+  const [loading, setLoading] = useState(true);
   const [graph, setGraph] = useState({"nodes": [], "links": []});
   const [allNodes, setAllNodes] = useState([]);
   const [allClientNum, setAllClientNum] = useState(0);
@@ -196,14 +73,13 @@ const Dashboard = (props) => {
   const [privateAndThirdNum, setPrivateAndThirdNum] = useState(0);
   const [initialResult, setInitialResult] = useState([]);
   const [searchResult, setSearchResult] = useState(initialResult);
-  
-  if (country && country !== curCountry ) {
-    setcurCountry(country);
-    setLoading(true);
-    fetch(`http://webdependency.andrew.cmu.edu:5000/country/${country}/service/dns/month/202210`)
+  console.log(service);
+
+  function getData(country, service, month) {
+    fetch(`http://webdependency.andrew.cmu.edu:5000/country/${country}/service/${service}/month/${month}`)
     .then((r) => r.json())
     .then((response) => {
-      const [graph, allNodes, clientNum, thirdNum, criticalNum, redundantNum, privateAndThirdNum] = getGraph(response.data);
+      const [graph, allNodes, clientNum, thirdNum, criticalNum, redundantNum, privateAndThirdNum] = getGraphStats(response.data, service);
       setGraph(graph);
       setAllNodes(allNodes);
       setAllClientNum(clientNum)
@@ -216,7 +92,7 @@ const Dashboard = (props) => {
       setLoading(false);
     });
   }
-  
+
   const onSearchByLabel = (e) => {
     setSearchResult(initialResult);
     const term = e.target.value;
@@ -229,9 +105,22 @@ const Dashboard = (props) => {
     }
   };
 
+  const onServiceChange = (e) => {
+    const curService = e.target.value;
+    setService(curService);
+    setLoading(true);
+    getData(country, curService, "202210")
+  }
+
+  if (country && country !== curCountry ) {
+    setcurCountry(country);
+    setLoading(true);
+    getData(country, service, "202210")
+  }
+
   return (
     <DashboardLayout>
-      <DashboardNavbar />
+      <DashboardNavbar service={service} onServiceChange={onServiceChange}/>
       {loading ?
       <CircularProgress sx={{ display: 'flex', marginLeft:"48%" }} color="info" size="4rem"/> :
       <MDBox py={3}>
@@ -257,10 +146,10 @@ const Dashboard = (props) => {
                   <MDTypography color="white">
                     Third-party Dependency
                   </MDTypography>
-                  <MDTypography pr={5} display="inline" variant="h1" color="white">
+                  <MDTypography pr={5} display="inline" variant="h2" color="white">
                     {thirdOnlyNum.toLocaleString()}
                   </MDTypography>
-                  <MDTypography display="inline" variant="h3" color="white">
+                  <MDTypography display="inline" variant="h4" color="white">
                       {getPercentage(thirdOnlyNum, allClientNum)}%
                   </MDTypography>
                 </CardContent>
@@ -274,10 +163,10 @@ const Dashboard = (props) => {
                   <MDTypography color="white">
                     Critical Dependency
                   </MDTypography>
-                  <MDTypography pr={5} display="inline" variant="h1" color="white">
+                  <MDTypography pr={5} display="inline" variant="h2" color="white">
                     {criticalNum.toLocaleString()}
                   </MDTypography>
-                  <MDTypography display="inline" variant="h3" color="white">
+                  <MDTypography display="inline" variant="h4" color="white">
                       {getPercentage(criticalNum, allClientNum)}%
                   </MDTypography>
                 </CardContent>
@@ -291,10 +180,10 @@ const Dashboard = (props) => {
                   <MDTypography color="white">
                     Redundancy
                   </MDTypography>
-                  <MDTypography pr={5} display="inline" variant="h1" color="white">
+                  <MDTypography pr={5} display="inline" variant="h2" color="white">
                     {redundantNum}
                   </MDTypography>
-                  <MDTypography display="inline" variant="h3" color="white">
+                  <MDTypography display="inline" variant="h4" color="white">
                     {getPercentage(redundantNum, allClientNum)}%
                   </MDTypography>
                 </CardContent>
@@ -308,10 +197,10 @@ const Dashboard = (props) => {
                   <MDTypography color="white">
                     Private and Third-party
                   </MDTypography>
-                  <MDTypography pr={5} display="inline" variant="h1" color="white">
+                  <MDTypography pr={5} display="inline" variant="h2" color="white">
                     {privateAndThirdNum}
                   </MDTypography>
-                  <MDTypography display="inline" variant="h3" color="white">
+                  <MDTypography display="inline" variant="h4" color="white">
                     {getPercentage(privateAndThirdNum, allClientNum)}%
                   </MDTypography>
                 </CardContent>
