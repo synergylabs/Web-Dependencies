@@ -32,16 +32,15 @@ def query_crux(country, month):
             DISTINCT origin,experimental.popularity.rank as rank
         FROM `chrome-ux-report.country_{country}.{month}`
         ORDER BY experimental.popularity.rank ASC
-        LIMIT 1000000;
+        LIMIT 100000;
     """
     query_job = client.query(query)
     results = query_job.result()  # Waits for job to complete.
     return results
 
 
-def extract_crux_file(country, month):
-    crux_output_filename = f"crux-{month}"
-    crux_output_file = open(f"./crux/{crux_output_filename}", "w")
+def extract_crux_file(crux_output_file_path, country, month):
+    crux_output_file = open(crux_output_file_path, "w")
     results = query_crux(country, month)
     websites = preprocess_crux(results)
 
@@ -51,3 +50,5 @@ def extract_crux_file(country, month):
         crux_output_file.write(f"{rank},{website},{subdomains}\n")
 
     crux_output_file.close()
+
+    return len(websites)

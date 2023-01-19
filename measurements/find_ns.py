@@ -13,7 +13,8 @@ MNAME: str = "mname"
 RNAME: str = "rname"
 SUBJECT_ALT_NAME: str = "subjectAltName"
 
-def measure(website_list_file: TextIOWrapper, top_n: int=1000) -> dict:
+
+def measure(website_list_file: TextIOWrapper, top_n: int = 1000) -> dict:
     """Dig all websites in the list and find their name servers
 
     Args:
@@ -49,16 +50,18 @@ def measure(website_list_file: TextIOWrapper, top_n: int=1000) -> dict:
             continue
         elif SERVFAIL in dig_domain_output:
             # No DNS query answer
-            dig_domain_8_output = utils.run_subprocess(['dig', '@8.8.8.8', domain, '+short'])
+            dig_domain_8_output = utils.run_subprocess(
+                ['dig', '@8.8.8.8', domain, '+short'])
             if NXDOMAIN in dig_domain_8_output:
                 utils.log_measurement_result(f'{domain}\t{NXDOMAIN}\n')
                 continue
             elif SERVFAIL in dig_domain_8_output:
                 utils.log_measurement_result(f'{domain}\t{SERVFAIL}\n')
                 continue
-        
+
         # Query ns
-        domain_ns_output = utils.run_subprocess(['dig', 'ns', '@8.8.8.8', domain, '+short'])
+        domain_ns_output = utils.run_subprocess(
+            ['dig', 'ns', '@8.8.8.8', domain, '+short'])
 
         if domain_ns_output == '':
             continue
@@ -73,6 +76,7 @@ def measure(website_list_file: TextIOWrapper, top_n: int=1000) -> dict:
         utils.log_measurement_result(f'{domain}\t{ns_all_str}\n')
 
     return domain_ns_all
+
 
 def classify(domain_ns_all: dict) -> Tuple[dict, list]:
     """Classify all ns types (private vs third party) based on
@@ -96,9 +100,11 @@ def classify(domain_ns_all: dict) -> Tuple[dict, list]:
 
     for website_domain, ns_set in domain_ns_all.items():
         ns_third = set()
-        website_domain_soa_output = utils.run_subprocess(['dig', 'soa', website_domain, '+short'])
-        website_domain_soa = build_soa(website_domain, website_domain_soa_output)
-        website_cert = utils.get_cert((website_domain, 443),3)
+        website_domain_soa_output = utils.run_subprocess(
+            ['dig', 'soa', website_domain, '+short'])
+        website_domain_soa = build_soa(
+            website_domain, website_domain_soa_output)
+        website_cert = utils.get_cert((website_domain, 443), 3)
         website_san = get_san(website_cert)
 
         for ns in ns_set:
@@ -113,15 +119,16 @@ def classify(domain_ns_all: dict) -> Tuple[dict, list]:
                 type = Ns_type.Private
             else:
                 # 3. SOA mname of ns and website
-                ns_soa_output = utils.run_subprocess(['dig', 'soa', ns_domain, '+short'])
+                ns_soa_output = utils.run_subprocess(
+                    ['dig', 'soa', ns_domain, '+short'])
                 ns_soa = build_soa(ns_domain, ns_soa_output)
 
                 if ns_soa and website_domain_soa:
                     ns_soa_all[ns_domain] = ns_soa
                     if website_domain_soa[MNAME] != ns_soa[MNAME]:
-                        type = Ns_type.Third_Party
+                        type = Ns_type.Third
                         ns_third.add(ns_domain)
-                        ns_soa_third.append(ns_soa)                        
+                        ns_soa_third.append(ns_soa)
 
             # Record ns and website domain to count concentration
             if type == Ns_type.Unknown:
@@ -129,7 +136,8 @@ def classify(domain_ns_all: dict) -> Tuple[dict, list]:
                     unknown_ns_website[ns_domain] = set()
                 unknown_ns_website[ns_domain].add(website_domain)
             else:
-                utils.log_classify_result(f"{website_domain}\t{ns_domain.rstrip('.')}\t{type.name}\n")
+                utils.log_classify_result(
+                    f"{website_domain}\t{ns_domain.rstrip('.')}\t{type.name}\n")
 
         if ns_third:
             website_domain_ns_third[website_domain] = ns_third
@@ -142,21 +150,25 @@ def classify(domain_ns_all: dict) -> Tuple[dict, list]:
                 if website_domain not in website_domain_ns_third:
                     website_domain_ns_third[website_domain] = set()
                 website_domain_ns_third[website_domain].add(ns_domain)
-                utils.log_classify_result(f"{website_domain}\t{ns_domain.rstrip('.')}\t{Ns_type.Third_Party.name}\n") 
+                utils.log_classify_result(
+                    f"{website_domain}\t{ns_domain.rstrip('.')}\t{Ns_type.Third.name}\n")
         else:
             for website_domain in websites:
-                utils.log_classify_result(f"{website_domain}\t{ns_domain.rstrip('.')}\t{Ns_type.Unknown.name}\n")  
+                utils.log_classify_result(
+                    f"{website_domain}\t{ns_domain.rstrip('.')}\t{Ns_type.Unknown.name}\n")
 
     return website_domain_ns_third, ns_soa_third
+
 
 def get_san(website_cert: dict) -> set:
     san_set = set()
     if website_cert:
         subject_alt_name = website_cert[SUBJECT_ALT_NAME]
         for san in subject_alt_name:
-            san_set.add(san[1])         
+            san_set.add(san[1])
 
     return san_set
+
 
 def get_existing_ns_groups():
     """Retrive existing groups of name servers"""
@@ -169,8 +181,9 @@ def get_existing_ns_groups():
         name_servers = group_and_ns[1].split(' ')
         for ns in name_servers:
             ns_and_group[ns] = group
-    
+
     return ns_and_group
+
 
 def group(website_domain_ns_third: dict, ns_soa_third: list) -> dict:
     """Group third party nameservers based on their
@@ -192,7 +205,7 @@ def group(website_domain_ns_third: dict, ns_soa_third: list) -> dict:
     for i in range(len(ns_soa_third)):
         ns_soa_third_1 = ns_soa_third[i]
         ns_domain_1 = ns_soa_third_1[DOMAIN]
-        
+
         if ns_domain_1 not in ns_group:
             if ns_domain_1 in existing_ns_groups:
                 ns_group[ns_domain_1] = existing_ns_groups[ns_domain_1]
@@ -211,8 +224,8 @@ def group(website_domain_ns_third: dict, ns_soa_third: list) -> dict:
 
                         # Group ns based on sld+tld, mname, and rname
                         if ns_domain_1 == ns_domain_2 or \
-                            ns_soa_third_1[MNAME] == ns_soa_third_2[MNAME] or \
-                            ns_soa_third_1[RNAME] == ns_soa_third_2[RNAME]:
+                                ns_soa_third_1[MNAME] == ns_soa_third_2[MNAME] or \
+                                ns_soa_third_1[RNAME] == ns_soa_third_2[RNAME]:
                             ns_group[ns_domain_2] = ns_group[ns_domain_1]
 
     for website_domain, ns_third in website_domain_ns_third.items():
@@ -240,16 +253,18 @@ def build_soa(domain: str, soa_output: str) -> dict:
 
     try:
         if soa_output:
-            soa_output_list = soa_output.strip().split(' ')          
+            soa_output_list = soa_output.strip().split(' ')
             soa_dict = {
                 'domain': domain,
                 'mname': utils.get_sld_tld(soa_output_list[0]),
                 'rname': utils.get_sld_tld(soa_output_list[1]),
             }
     except Exception as e:
-        utils.log_error(f"build_soa \t domain {domain} soa_output {soa_output}. Error: {e}")
+        utils.log_error(
+            f"build_soa \t domain {domain} soa_output {soa_output}. Error: {e}")
 
     return soa_dict
+
 
 def build_graph(domain_ns_third: dict) -> object:
     links = set()
@@ -258,17 +273,19 @@ def build_graph(domain_ns_third: dict) -> object:
 
     for domain, ns_third in domain_ns_third.items():
         nodes.add((domain, Node_type.Client.name))
-        domain_and_type = utils.build_node_and_type(domain, Node_type.Client.name)
+        domain_and_type = utils.build_node_and_type(
+            domain, Node_type.Client.name)
         if domain_and_type not in link_count:
             link_count[domain_and_type] = 0
         for ns in ns_third:
             nodes.add((ns, Node_type.Provider.name))
             links.add((ns, domain))
-            ns_and_type = utils.build_node_and_type(ns, Node_type.Provider.name)
+            ns_and_type = utils.build_node_and_type(
+                ns, Node_type.Provider.name)
 
             if ns_and_type not in link_count:
                 link_count[ns_and_type] = 0
-            
+
             link_count[ns_and_type] += 1
             link_count[domain_and_type] += 1
 
@@ -290,10 +307,10 @@ def build_graph(domain_ns_third: dict) -> object:
                 'val': val,
                 'count': count
             }
-            
+
             n_map[n] = n_id
             id_increment += 1
-    
+
     links = list(links)
     if links:
         id_increment = 1
@@ -313,6 +330,7 @@ def build_graph(domain_ns_third: dict) -> object:
 
     return graph
 
+
 def main():
     # Path to the websites list file
     website_list_path = sys.argv[1]
@@ -327,7 +345,8 @@ def main():
     print(domain_ns_all)
     website_domain_ns_third, ns_soa_third = classify(domain_ns_all)
     print(website_domain_ns_third)
-    website_domain_ns_third_group = group(website_domain_ns_third, ns_soa_third)
+    website_domain_ns_third_group = group(
+        website_domain_ns_third, ns_soa_third)
     print(website_domain_ns_third_group)
     graph = build_graph(website_domain_ns_third_group)
 
