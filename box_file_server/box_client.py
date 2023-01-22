@@ -1,7 +1,9 @@
 import json
+import os.path
 from boxsdk import Client
 from boxsdk.auth.ccg_auth import CCGAuth
 from pathlib import Path
+from helper import check_and_create_country_month_dir, write_file_content
 
 
 class BoxClient:
@@ -23,28 +25,87 @@ class BoxClient:
         )
         self.client = Client(auth)
 
-    def get_file(self, country, service, month):
+    def get_country_file(self, country, service, month):
+
         folder_name = f'data-{month}'
         file_name = f'{country}-{service}-{month}'
+        file_content = ""
+
+        file_path = f'./files/countries/{country}/{month}/{file_name}'
+
+        if os.path.isfile(file_path):
+            print('file exists')
+            file = open(file_path, 'r')
+            file_content = file.read()
+            file.close()
+        else:
+            print('path is not file')
+            check_and_create_country_month_dir(country, month)
+
+            file_id = None
+            subfolders = self.client.folder(folder_id=self.root_folder_id).get_items()
+            for subfolder in subfolders:
+                if subfolder.name == folder_name:
+                    files = self.client.folder(folder_id=subfolder.id).get_items()
+                    for file in files:
+                        if file.name == file_name:
+                            file_id = file.id
+            if file_id:
+                # Write the Box file contents to disk
+                file_content = self.client.file(file_id).content()
+                file_content = file_content.decode('utf-8')
+                write_file_content(file_content, file_path)
+        return file_content
+
+    def get_graph_file(self, country, service, month):
+        filename = f'{country}-{service}-{month}-graph.json'
+        file_content = self.find_file(country, service, month, filename)
+
+        return file_content
+
+    def get_provider_stats(self, country, service, month):
+        filename = f'{country}-{service}-{month}-provider-stats'
+        file_content = self.find_file(country, service, month, filename)
+
+        return file_content
+
+    def get_client_stats(self, country, service, month):
+        filename = f'{country}-{service}-{month}-client-stats'
+        file_content = self.find_file(country, service, month, filename)
+
+        return file_content
+
+    def get_provider_stats(self, country, service, month):
+        filename = f'{country}-{service}-{month}-provider-stats'
+        file_content = self.find_file(country, service, month, filename)
+
+        return file_content
+
+    def get_client_stats(self, country, service, month):
+        filename = f'{country}-{service}-{month}-client-stats'
+        file_content = self.find_file(country, service, month, filename)
+
+        return file_content
+
+    def find_file(self, country, service, month, filename):
         file_id = None
         file_content = ""
 
-        subfolders = self.client.folder(
-            folder_id=self.root_folder_id).get_items()
-        for subfolder in subfolders:
-            if subfolder.name == folder_name:
-                files = self.client.folder(folder_id=subfolder.id).get_items()
-                for file in files:
-                    if file.name == file_name:
-                        file_id = file.id
+        country_subfolders = self.client.folder(folder_id=self.root_folder_id).get_items()
+        for cs in country_subfolders:
+            if cs.name == country:
+                month_subfolders = self.client.folder(folder_id=cs.id).get_items()
+                for ms in month_subfolders:
+                    if ms.name == month:
+                        files = self.client.folder(folder_id=ms.id).get_items()
+                        for file in files:
+                            if file.name == filename:
+                                file_id = file.id
         if file_id:
             # Write the Box file contents to disk
             file_content = self.client.file(file_id).content()
-        return file_content
 
-        # Write the Box file contents to disk
-        # output_file = open('download_file', 'wb')
-        # client.file(file_id).download_to(output_file)
+        return file_content
 
 
 box_client = BoxClient()
