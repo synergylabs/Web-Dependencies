@@ -1,12 +1,16 @@
-import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
+import CardActions from "@mui/material/CardActions";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 
 const GridItemCard = (props) => {
-  const { xs, md, lg, imageName, contentHeader, contentBody } = props;
+  const { xs, md, lg, imageName, contentHeader, contentBody, sourceName } = props;
+  const sourceLinkBase =
+    "https://github.com/synergylabs/Web-Dependencies/tree/dev/webapp/data/region/africa";
+  const sourceLink = `${sourceLinkBase}/${sourceName}`;
 
   return (
     <Grid item xs={xs} md={md} lg={lg}>
@@ -24,6 +28,9 @@ const GridItemCard = (props) => {
             </Typography>
           )}
         </CardContent>
+        <CardActions>
+          <Button href={sourceLink}>View Source</Button>
+        </CardActions>
       </Card>
     </Grid>
   );
