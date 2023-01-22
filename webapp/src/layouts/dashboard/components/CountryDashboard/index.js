@@ -18,6 +18,7 @@ import { useState } from "react";
 // @mui material components
 import Box from '@mui/material/Box';
 import Card from "@mui/material/Card";
+import CardMedia from '@mui/material/CardMedia';
 import CardContent from '@mui/material/CardContent';
 import CircularProgress from '@mui/material/CircularProgress';
 import Grid from "@mui/material/Grid";
@@ -35,7 +36,9 @@ import Footer from "examples/Footer";
 // Dashboard components
 import Graph from "layouts/dashboard/components/DependencyGraph/Graph";
 import Search from "layouts/dashboard/components/DependencyGraph/Search";
-import { getDnsGraphStats, getCdnGraphStats, getCaGraphStats } from "./graphStatsHelper"
+import { getDnsGraphStats, getCdnGraphStats, getCaGraphStats } from "../CountryDashboard/graphStatsHelper"
+
+const data_ready = new Set([])
 
 const top_n = 5;
 const getTop5Providers = (nodes) => {
@@ -43,11 +46,14 @@ const getTop5Providers = (nodes) => {
   return nodes.slice(0, top_n);
 };
 
+const getTop5ProvidersByConcentration = (providers) => {
+  providers = providers.sort((p1, p2) => p2.concentration - p1.concentration);
+  return providers.slice(0, top_n);
+}
 const getGraphStats = (text, service) => {
   if (service === "dns") {
     return getDnsGraphStats(text);
   } else if (service === "cdn") {
-    console.log(text)
     return getCdnGraphStats(text);
   } else {
     return getCaGraphStats(text);
@@ -58,8 +64,26 @@ function getPercentage(value, total) {
   return Math.round(100*value/total);
 }
 
-const Dashboard = (props) => {
-  const {country} = props;
+function parseProviderStats(providerstats) {
+  const providerData = providerstats.split(/\r?\n/).filter((d) => d);
+  const allProviders = providerData.slice(1).map(line => {
+    const data = line.split(",");
+    const label = data[0];
+    const concentration = parseInt(data[1]);
+    const impact = parseInt(data[2]);
+
+    return {
+      label,
+      concentration,
+      impact,
+    }
+  });
+
+  return allProviders;
+}
+
+const CountryDashboard = (props) => {
+  const {country, title} = props;
 
   const [curCountry, setcurCountry] = useState("");
   const [service, setService] = useState("dns")
@@ -73,24 +97,60 @@ const Dashboard = (props) => {
   const [privateAndThirdNum, setPrivateAndThirdNum] = useState(0);
   const [initialResult, setInitialResult] = useState([]);
   const [searchResult, setSearchResult] = useState(initialResult);
-  console.log(service);
 
   function getData(country, service, month) {
-    fetch(`http://webdependency.andrew.cmu.edu:5000/country/${country}/service/${service}/month/${month}`)
-    .then((r) => r.json())
-    .then((response) => {
-      const [graph, allNodes, clientNum, thirdNum, criticalNum, redundantNum, privateAndThirdNum] = getGraphStats(response.data, service);
-      setGraph(graph);
-      setAllNodes(allNodes);
-      setAllClientNum(clientNum)
-      setThirdOnlyNum(thirdNum)
-      setCriticalNum(criticalNum);
-      setredundantNum(redundantNum);
-      setPrivateAndThirdNum(privateAndThirdNum);
-      setInitialResult(getTop5Providers(allNodes));
-      setSearchResult(getTop5Providers(allNodes));
-      setLoading(false);
-    });
+    const data_name = `${country}-${service}-${month}`
+    if (data_ready.has(data_name)) {
+      let graph_loading = false;
+      let provider_stats_loading = false;
+      let client_stats_loading = false;
+
+      fetch(`http://localhost:5000/${country}/${service}/${month}/graph`)
+      .then((r) => r.json())
+      .then((response) => {
+        console.log(response.data);
+        setGraph(JSON.parse(response.data));
+        graph_loading = false;
+        setLoading(graph_loading || provider_stats_loading || client_stats_loading);
+      });
+
+      fetch(`http://localhost:5000/${country}/${service}/${month}/provider`)
+      .then((r) => r.json())
+      .then((response) => {
+        console.log(response.data);
+        const allProviders = parseProviderStats(response.data);
+        provider_stats_loading = false;
+        client_stats_loading = false;
+        // setGraph(JSON.parse(response.data))
+        // const [graph, allNodes, clientNum, thirdNum, criticalNum, redundantNum, privateAndThirdNum] = getGraphStats(response.data, service);
+        // setAllNodes(allNodes);
+        // setAllClientNum(clientNum)
+        // setThirdOnlyNum(thirdNum)
+        // setCriticalNum(criticalNum);
+        // setredundantNum(redundantNum);
+        // setPrivateAndThirdNum(privateAndThirdNum);
+        setInitialResult(getTop5ProvidersByConcentration(allProviders));
+        setSearchResult(getTop5ProvidersByConcentration(allProviders));
+        setLoading(graph_loading || provider_stats_loading || client_stats_loading);
+      });
+    } else {
+      fetch(`http://webdependency.andrew.cmu.edu:5000/country/${country}/service/${service}/month/${month}`)
+      .then((r) => r.json())
+      .then((response) => {
+        const [graph, allNodes, clientNum, thirdNum, criticalNum, redundantNum, privateAndThirdNum] = getGraphStats(response.data, service);
+        setGraph(graph);
+        setAllNodes(allNodes);
+        setAllClientNum(clientNum)
+        setThirdOnlyNum(thirdNum)
+        setCriticalNum(criticalNum);
+        setredundantNum(redundantNum);
+        setPrivateAndThirdNum(privateAndThirdNum);
+        setInitialResult(getTop5Providers(allNodes));
+        setSearchResult(getTop5Providers(allNodes));
+        setLoading(false);
+      });
+    }
+    
   }
 
   const onSearchByLabel = (e) => {
@@ -120,7 +180,7 @@ const Dashboard = (props) => {
 
   return (
     <DashboardLayout>
-      <DashboardNavbar service={service} onServiceChange={onServiceChange}/>
+      <DashboardNavbar title={title} service={service} onServiceChange={onServiceChange} showService />
       {loading ?
       <CircularProgress sx={{ display: 'flex', marginLeft:"48%" }} color="info" size="4rem"/> :
       <MDBox py={3}>
@@ -128,9 +188,10 @@ const Dashboard = (props) => {
           <Grid container spacing={3}>
             <Grid item xs={12} md={8} lg={8}>
               <Card>
-                <MDBox>
-                  <Graph graphData={graph} />
-                </MDBox>
+                <CardMedia
+                  component="img"
+                  image={require(`./img/${country}-${service}.png`)}
+                />
               </Card>
             </Grid>
             <Grid item xs={12} md={4} lg={4}>
@@ -144,7 +205,7 @@ const Dashboard = (props) => {
               <Card style={{ backgroundColor: "#b45f06" }} >
                 <CardContent>
                   <MDTypography color="white">
-                    Third-party Dependency
+                    Third-party
                   </MDTypography>
                   <MDTypography pr={5} display="inline" variant="h2" color="white">
                     {thirdOnlyNum.toLocaleString()}
@@ -161,7 +222,7 @@ const Dashboard = (props) => {
               <Card style={{ backgroundColor: "#d63232" }}>
                 <CardContent>
                   <MDTypography color="white">
-                    Critical Dependency
+                    Critical
                   </MDTypography>
                   <MDTypography pr={5} display="inline" variant="h2" color="white">
                     {criticalNum.toLocaleString()}
@@ -214,4 +275,4 @@ const Dashboard = (props) => {
   );
 };
 
-export default Dashboard;
+export default CountryDashboard;

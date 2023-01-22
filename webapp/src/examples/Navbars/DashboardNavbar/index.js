@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 /**
 =========================================================
 * Material Dashboard 2 React - v2.1.0
@@ -58,7 +59,7 @@ import {
   setOpenConfigurator,
 } from "context";
 
-function DashboardNavbar({ absolute, light, isMini, service, onServiceChange }) {
+function DashboardNavbar({ absolute, light, isMini, title, service, onServiceChange, showService }) {
   const [navbarType, setNavbarType] = useState();
   const [controller, dispatch] = useMaterialUIController();
   const { miniSidenav, transparentNavbar, fixedNavbar, openConfigurator, darkMode } = controller;
@@ -136,23 +137,25 @@ function DashboardNavbar({ absolute, light, isMini, service, onServiceChange }) 
     >
       <Toolbar sx={(theme) => navbarContainer(theme)}>
         <MDBox color="inherit" mb={{ xs: 1, md: 0 }} sx={(theme) => navbarRow(theme, { isMini })}>
-          <Breadcrumbs icon="home" title={route[route.length - 1]} route={route} light={light} />
-          <Box sx={{ minWidth: 180 }}>
-            <FormControl fullWidth>
-              <InputLabel id="service-label">Service</InputLabel>
-              <Select
-                labelId="service-label"
-                value={service}
-                label="Service"
-                sx={{ minHeight: 30 }}
-                onChange={onServiceChange}
-              >
-                <MenuItem value={"dns"}>DNS</MenuItem>
-                <MenuItem value={"cdn"}>CDN</MenuItem>
-                <MenuItem value={"ocsp"}>CA</MenuItem>
-              </Select>
-            </FormControl>
-          </Box>
+          <Breadcrumbs icon="home" title={title} route={route} light={light} />
+          {showService && (
+            <Box sx={{ minWidth: 180 }}>
+              <FormControl fullWidth>
+                <InputLabel id="service-label">Service</InputLabel>
+                <Select
+                  labelId="service-label"
+                  value={service}
+                  label="Service"
+                  sx={{ minHeight: 30 }}
+                  onChange={onServiceChange}
+                >
+                  <MenuItem value={"dns"}>DNS</MenuItem>
+                  <MenuItem value={"cdn"}>CDN</MenuItem>
+                  <MenuItem value={"ocsp"}>CA</MenuItem>
+                </Select>
+              </FormControl>
+            </Box>
+          )}
         </MDBox>
         {/* {isMini ? null : (
           <MDBox sx={(theme) => navbarRow(theme, { isMini })}>
@@ -211,6 +214,7 @@ DashboardNavbar.defaultProps = {
   absolute: false,
   light: false,
   isMini: false,
+  showService: false,
 };
 
 // Typechecking props for the DashboardNavbar
@@ -218,8 +222,10 @@ DashboardNavbar.propTypes = {
   absolute: PropTypes.bool,
   light: PropTypes.bool,
   isMini: PropTypes.bool,
+  title: PropTypes.string,
   service: PropTypes.string,
   onServiceChange: PropTypes.func,
+  showService: PropTypes.bool,
 };
 
 export default DashboardNavbar;

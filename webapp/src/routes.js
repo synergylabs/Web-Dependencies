@@ -36,52 +36,81 @@ Coded by www.creative-tim.com
   10. The `component` key is used to store the component of its route.
 */
 
+import MDAvatar from "components/MDAvatar";
+
 // Material Dashboard 2 React layouts
-import Dashboard from "layouts/dashboard";
+import CountryDashboard from "layouts/dashboard/components/CountryDashboard";
+import RegionDashboard from "layouts/dashboard/components/RegionDashboard";
 
 // @mui icons
 import ReactCountryFlag from "react-country-flag"
 
 const routes = [
   {
+    type: "divider",
+  },
+  {
+    type: "title",
+    name: "Regions",
+    title: "Regions",
+    key: "regions",
+  },
+  {
+    type: "collapse",
+    name: "Africa",
+    key: "af",
+    icon: <MDAvatar variant="circular" size="sm">AF</MDAvatar>,
+    route: "/region/af",
+    component: <RegionDashboard region="us" title="Africa" />,
+  },
+  {
+    type: "divider",
+  },
+  {
+    type: "title",
+    name: "Countries",
+    title: "Countries",
+    key: "countries",
+  },
+  {
     type: "collapse",
     name: "United States",
     key: "us",
     icon: <ReactCountryFlag countryCode="US"/>,
-    route: "/us",
-    component: <Dashboard country="us"/>,
+    route: "/country/us",
+    component: <CountryDashboard country="us" title="United States"/>,
   },
   {
     type: "collapse",
     name: "Kenya",
     key: "ke",
     icon: <ReactCountryFlag countryCode="KE"/>,
-    route: "/ke",
-    component: <Dashboard country="ke"/>,
+    route: "/country/ke",
+    component: <CountryDashboard country="ke" title="Kenya"/>,
   },
   {
     type: "collapse",
     name: "Nigeria",
     key: "ng",
     icon: <ReactCountryFlag countryCode="NG"/>,
-    route: "/ng",
-    component: <Dashboard country="ng"/>,
+    route: "/country/ng",
+    component: <CountryDashboard country="ng" title="Nigeria"/>,
   },
   {
     type: "collapse",
     name: "Rwanda",
-    key: "rw",
+    key: "/rw",
     icon: <ReactCountryFlag countryCode="RW"/>,
-    route: "/rw",
-    component: <Dashboard country="rw"/>,
+    route: "/country/rw",
+    component: <CountryDashboard country="rw" title="Rwanda"/>,
   },
   {
     type: "collapse",
     name: "South Africa",
     key: "za",
     icon: <ReactCountryFlag countryCode="ZA"/>,
-    route: "/za",
-    component: <Dashboard country="za"/>,
+    route: "/country/za",
+    component: <CountryDashboard country="za" title="South Africa"/>,
   },
 ];
 
