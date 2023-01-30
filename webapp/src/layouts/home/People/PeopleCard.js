@@ -15,7 +15,7 @@ export const PeopleCard = (props) => {
   const { name, email, link } = props;
 
   return (
-    <Grid item xs={12} md={3} lg={3}>
+    <Grid item xs={12} md={4} lg={4}>
       <Card sx={{ height: "100%", boxShadow: "none" }}>
         {/* <CardMedia component="img" image={require(`../img/${imageName}`)} /> */}
         <CardContent>

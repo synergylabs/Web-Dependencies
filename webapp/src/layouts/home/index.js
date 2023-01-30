@@ -21,7 +21,7 @@ export default function Home() {
           <Stack direction="column" justifyContent="center" alignItems="center">
             <MDBox pt={3} px={2}>
               <MDTypography variant="h2" fontWeight="medium">
-                Web Dependency
+                Web Infrastructure Dependencies
               </MDTypography>
             </MDBox>
             <MDBox pt={3} px={2} width={0.8}>
