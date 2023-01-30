@@ -39,13 +39,24 @@ Coded by www.creative-tim.com
 import MDAvatar from "components/MDAvatar";
 
 // Material Dashboard 2 React layouts
+import Home from "layouts/home"
 import CountryDashboard from "layouts/dashboard/components/CountryDashboard";
 import RegionDashboard from "layouts/dashboard/components/RegionDashboard";
 
 // @mui icons
 import ReactCountryFlag from "react-country-flag"
 
+import HomeIcon from '@mui/icons-material/Home';
+
 const routes = [
+  {
+    type: "collapse",
+    name: "Home",
+    key: "home",
+    icon: <HomeIcon />,
+    route: "/",
+    component: <Home />,
+  },
   {
     type: "divider",
   },

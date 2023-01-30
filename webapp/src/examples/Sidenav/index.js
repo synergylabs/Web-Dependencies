@@ -26,6 +26,7 @@ import List from "@mui/material/List";
 import Divider from "@mui/material/Divider";
 import Link from "@mui/material/Link";
 import Icon from "@mui/material/Icon";
+import WebIcon from "@mui/icons-material/Web";
 
 // Material Dashboard 2 React components
 import MDBox from "components/MDBox";
@@ -98,13 +99,17 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
           <SidenavCollapse
             name={name}
             icon={icon}
-            active={collapseName.includes(key)}
+            active={(key === "home" && !collapseName) || collapseName.includes(key)}
             collapse={collapse}
           />
         </Link>
       ) : (
         <NavLink key={key} to={route}>
-          <SidenavCollapse name={name} icon={icon} active={collapseName.includes(key)} />
+          <SidenavCollapse
+            name={name}
+            icon={icon}
+            active={(key === "home" && !collapseName) || collapseName.includes(key)}
+          />
         </NavLink>
       );
     } else if (type === "title") {
