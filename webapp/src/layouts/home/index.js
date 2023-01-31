@@ -3,15 +3,14 @@ import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
 
-// Material Dashboard 2 React components
 import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
 
-// Material Dashboard 2 React example components
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
-import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import News from "./News";
 import People from "./People";
+import Publications from "./Publications";
+import ItemLink from "./ItemLink";
 
 export default function Home() {
   return (
@@ -41,7 +40,14 @@ export default function Home() {
               </Typography>
               <Typography gutterbottom paragraph variant="body2" component="div">
                 This website displays our existing measurement results on DNS, CDN, and CA from
-                vantage points in different regions and countries.
+                vantage points in different regions and countries. Please refer to our{" "}
+                {
+                  <ItemLink
+                    link="https://dl.acm.org/doi/10.1145/3419394.3423664"
+                    name="IMC'20 work"
+                  />
+                }{" "}
+                for methodology.
               </Typography>
             </MDBox>
             <MDBox pt={3} px={2} width={0.8}>
@@ -52,6 +58,10 @@ export default function Home() {
             <MDBox pt={3} px={2} width={0.8}>
               <Divider />
               <People />
+            </MDBox>
+            <MDBox pt={3} px={2} width={0.8}>
+              <Divider />
+              <Publications />
             </MDBox>
           </Stack>
         </Card>
