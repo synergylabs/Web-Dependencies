@@ -20,6 +20,12 @@ The general measurement workflow is the following:
 1. Analyze: Process analyze the results to obtain provider stats and client stats
 1. Plot: Generate a json file for dependency graph plotting on the web application
 
+Note: The workflow is only set up with DNS for now
+
+Request access to the following if you don't have permissions:
+- Box folder is available here: https://cmu.app.box.com/folder/182556826473
+- The application to upload/download file is https://cmu.app.box.com/developers/console/app/1897359
+
 To run the measurement:
 1. Go to measurements directory `cd measurements`
 1. Install dependencies: `pipenv install`
@@ -27,8 +33,15 @@ To run the measurement:
 1. Run scripts: `python main.py <country_code>`
     1. `country_code` is the two character code for the country, e.g. the country code for the United States is `us`
 
+
+
 ## 2. Web Application
-The web application is a React frontend application. The source files for the home page is in `src/layouts/home/`. The source files for region analysis, country analysis are in `src/layouts/dashboard`. The web application may load files in this repo or call the [Box File Server](#3-box-file-server) to fetch files from CMU Box.
+The web application is a React frontend application. The web application may load files in this repo or call the [Box File Server](#3-box-file-server) to fetch files from CMU Box. The application uses [Material UI](https://mui.com/material-ui/getting-started/overview/) with some [Material Dashboard Components](https://www.creative-tim.com/learning-lab/react/routing-system/material-dashboard/).
+
+- The source files for the home page is in `src/layouts/home/`. 
+- The source files for region analysis, country analysis are in `src/layouts/dashboard`. 
+- The source files for side nav bar are in `src/examples/Sidenav`
+The soruce files for top nav bar are in `src/examples/Navbars/DashboardNavbar`
 
 To run the application:
 1. Install dependencies: `npm install`
@@ -36,7 +49,8 @@ To run the application:
 1. The application should be available at http://localhost:8080/
 
 ## 3. Box File Server
-The Box file server is a backend service written in Python [Flask](https://flask.palletsprojects.com/en/2.2.x/). It is used to fetch files from CMU Box. The file server is deployed at http://webdependency.andrew.cmu.edu:5000/
+The Box file server is a backend service written in Python [Flask](https://flask.palletsprojects.com/en/2.2.x/). It is used to fetch files from CMU Box. Currently the route `/country/<country>/service/<service>/month/<month>` is in use. It first look for requested file from directory `files`, and fetch from Box if the file doesn't exist locally. The file server is deployed at http://webdependency.andrew.cmu.edu:5000/
+
 
 Request access to the following if you don't have permissions:
 - Box folder is available here: https://cmu.app.box.com/folder/182556826473
