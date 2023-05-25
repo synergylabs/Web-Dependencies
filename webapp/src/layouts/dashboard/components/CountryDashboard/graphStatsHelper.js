@@ -16,10 +16,10 @@ export const getCaGraphStats = (text) => {
   allData.forEach((oneData) => {
     const line = oneData.split(",");
     const client = [line[0], line[1]];
-    const providerType = line[4];
-    const provider = line[3];
+    const providerType = line[3];
+    const provider = line[2];
     const rank = line[0];
-    const stapling = line[5];
+    const stapling = line[4];
     if (providerType === "Pvt") {
       clientPrivateProviders.add(client);
       allKnownClients.add(client);
