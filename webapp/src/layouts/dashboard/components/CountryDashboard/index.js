@@ -216,9 +216,10 @@ const CountryDashboard = (props) => {
   }
   const onSnapshotChange = (e) => {
     const curSnapshot = e.target.value;
+    console.log(curSnapshot);
     setSnapshot(curSnapshot);
     setLoading(true);
-    getData(country, "us", curSnapshot)
+    getData(country, service, curSnapshot)
   }
 
   if (country && country !== curCountry ) {
