@@ -15,6 +15,7 @@ export const getCaGraphStats = (text) => {
 
   allData.forEach((oneData) => {
     const line = oneData.split(",");
+    console.log(line);
     const client = [line[0], line[1]];
     const providerType = line[3];
     const provider = line[2];
