@@ -1477,7 +1477,7 @@
 5000,greatclips.com,digicertinc,Third,True
 5000,10faq.com,digicertinc,Third,True
 5000,albert.io,amazon,Third,False
-5000,websight.blue,ocsp.e2m02.amazontrust.com,Amazon,Third,False
+5000,websight.blue,amazon,Third,False
 5000,milesplit.com,amazon,Third,False
 5000,llbean.com,digicertinc,Third,True
 5000,topstreams.info,letsencrypt,Third,False
@@ -2382,7 +2382,6 @@
 5000,greatclips.com,digicertinc,Third,True
 5000,10faq.com,digicertinc,Third,True
 5000,albert.io,amazon,Third,False
-5000,websight.blue,ocsp.e2m02.amazontrust.com,Amazon,Third,False
 5000,milesplit.com,amazon,Third,False
 5000,llbean.com,digicertinc,Third,True
 5000,topstreams.info,letsencrypt,Third,False
@@ -3045,7 +3044,6 @@
 5000,greatclips.com,digicertinc,Third,True
 5000,10faq.com,digicertinc,Third,True
 5000,albert.io,amazon,Third,False
-5000,websight.blue,ocsp.e2m02.amazontrust.com,Amazon,Third,False
 5000,milesplit.com,amazon,Third,False
 5000,llbean.com,digicertinc,Third,True
 5000,topstreams.info,letsencrypt,Third,False
@@ -8121,7 +8119,6 @@
 10000,cashnetusa.com,godaddycominc,Third,False
 10000,nitter.net,letsencrypt,Third,False
 10000,kfor.com,letsencrypt,Third,True
-10000,toofab.com,ocsp.e2m01.amazontrust.com,Amazon,Third,True
 10000,betterimpact.com,googletrustservicesllc,Third,True
 10000,actblue.com,amazon,Third,False
 10000,self.com,globalsignnv-sa,Third,True
