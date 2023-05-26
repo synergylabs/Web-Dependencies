@@ -18,6 +18,14 @@ def get_file(country, service, month):
         "data": file_content,
     }
 
+@app.route("/country/<country>/service/<service>/list")
+@cross_origin(origins=["http://localhost:8080", "http://webdependency.andrew.cmu.edu:8080","http://localhost","http://webdependency.andrew.cmu.edu"])
+def get_file_lists(country, service):
+    file_list = box_client.get_file_lists(country, service)
+    return {
+        "data": file_list,
+    }
+
 
 @app.route("/<country>/<service>/<month>/graph")
 @cross_origin(origins=["http://localhost:8080", "http://webdependency.andrew.cmu.edu:8080","http://localhost","http://webdependency.andrew.cmu.edu"])

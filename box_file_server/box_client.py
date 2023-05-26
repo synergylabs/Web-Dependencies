@@ -25,6 +25,15 @@ class BoxClient:
         )
         self.client = Client(auth)
 
+    def get_file_lists(self, country, service):
+        dir_path = f"./files/countries/{country}/"
+        entries = Path(dir_path)
+        files = set()
+        for e in entries:
+            if(service in e):
+                files.add(e)
+        return files
+
     def get_country_file(self, country, service, month):
 
         folder_name = f'data-{month}'
