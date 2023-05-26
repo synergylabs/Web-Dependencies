@@ -1,10 +1,11 @@
 {
   "name": "web-dependency-app",
-  "version": "2.1.0",
+  "version": "1.1.0",
   "private": true,
-  "author": "Creative Tim",
-  "license": "See license in https://www.creative-tim.com/license",
-  "description": "React version of Material Dashboard 2 by Creative Tim",
+  "author": "Aqsa Kashaf",
+  "license": "MIT License",
+  "description": "Web dependency dashboard",
+  "homepage": ".",
   "bugs": {
     "url": "https://github.com/creativetimofficial/material-dashboard-react/issues"
   },

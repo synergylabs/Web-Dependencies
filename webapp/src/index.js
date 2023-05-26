@@ -22,7 +22,7 @@ import App from "App";
 import { MaterialUIControllerProvider } from "context";
 
 ReactDOM.render(
-  <BrowserRouter>
+  <BrowserRouter basename="/aqsa">
     <MaterialUIControllerProvider>
       <App />
     </MaterialUIControllerProvider>
