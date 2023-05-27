@@ -31,6 +31,8 @@ import Menu from "@mui/material/Menu";
 import Icon from "@mui/material/Icon";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
+import MenuList from '@mui/material/MenuList';
+
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 
@@ -59,7 +61,15 @@ import {
   setOpenConfigurator,
 } from "context";
 
-function DashboardNavbar({ absolute, light, isMini, title, service, onServiceChange, showService, snapshot, onSnapshotChange, showSnapshot }) {
+
+function get_menu_items(files) {
+  files.map((item) => {
+    return (
+      <MenuItem value={item}>item</MenuItem>
+    )
+  })
+}
+function DashboardNavbar({ absolute, light, isMini, title, service, onServiceChange, showService, snapshot, onSnapshotChange, fileList, showSnapshot }) {
   const [navbarType, setNavbarType] = useState();
   const [controller, dispatch] = useMaterialUIController();
   const { miniSidenav, transparentNavbar, fixedNavbar, openConfigurator, darkMode } = controller;
@@ -78,6 +88,7 @@ function DashboardNavbar({ absolute, light, isMini, title, service, onServiceCha
     function handleTransparentNavbar() {
       setTransparentNavbar(dispatch, (fixedNavbar && window.scrollY === 0) || !fixedNavbar);
     }
+
 
     /** 
      The event listener that's calling the handleTransparentNavbar function when 
@@ -167,9 +178,13 @@ function DashboardNavbar({ absolute, light, isMini, title, service, onServiceCha
                   sx={{ minHeight: 30 }}
                   onChange={onSnapshotChange}
                 >
-                  <MenuItem value={"202210"}>10-2022</MenuItem>
-                  <MenuItem value={"202304"}>04-2023</MenuItem>
-                  {/* <MenuItem value={"ocsp"}>CA</MenuItem> */}
+                  {/* <MenuItem value={"202210"}>10-2022</MenuItem> */}
+                  {/* <MenuItem value={"202304"}>202304</MenuItem> */}
+                  {fileList.map((option) => (
+                    <MenuItem key={option}>
+                    {option}
+                    </MenuItem>
+                  ))}
                 </Select>
               </FormControl>
             </Box>

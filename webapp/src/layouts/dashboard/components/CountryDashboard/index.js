@@ -119,6 +119,7 @@ const CountryDashboard = (props) => {
   const [searchResult, setSearchResult] = useState(initialResult);
   const [searchHeading, setSearchHeading] = useState("Providers");
   const [open, setOpen] = useState(false);
+  const [fileList, setFileList] = useState([]);
 
   function getWebsites(privateAndThird) {
     return Object.keys(privateAndThird).map((key, index) => ( 
@@ -140,6 +141,14 @@ const CountryDashboard = (props) => {
       const [graph, allNodes, clientNum, thirdNum, criticalNum, redundantNum, privateAndThirdNum,privateAndThird] = getGraphStats(response, "dns");
       setServiceNodes(allNodes);
       });
+  }
+
+  function get_file_list(country, service) {
+    fetch(`http://webdependency.andrew.cmu.edu:5000/country/${country}/service/${service}/list`).then((r) => r.json())
+    .then((response) => {
+      let files = response.data.split(";")
+      setFileList(files)
+    });
   }
   function getData(country, service, month) {
     const data_name = `${country}-${service}-${month}`
@@ -213,6 +222,7 @@ const CountryDashboard = (props) => {
     setService(curService);
     setLoading(true);
     getData(country, curService, "202210")
+    get_file_list(country, curService)
   }
   const onSnapshotChange = (e) => {
     const curSnapshot = e.target.value;
@@ -226,11 +236,12 @@ const CountryDashboard = (props) => {
     setcurCountry(country);
     setLoading(true);
     getData(country, service, "202210")
+    get_file_list(country, service)
   }
 
   return (
     <DashboardLayout>
-      <DashboardNavbar title={title} service={service} onServiceChange={onServiceChange} showService snapshot={snapshot} onSnapshotChange={onSnapshotChange} showSnapshot />
+      <DashboardNavbar title={title} service={service} onServiceChange={onServiceChange} showService snapshot={snapshot} onSnapshotChange={onSnapshotChange} fileList={fileList} showSnapshot />
       {loading ?
       <CircularProgress sx={{ display: 'flex', marginLeft:"48%" }} color="info" size="4rem"/> :
       <MDBox py={3}>
