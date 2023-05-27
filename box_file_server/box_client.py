@@ -34,7 +34,7 @@ class BoxClient:
             for file in folder.iterdir():
                 print(file)
                 if(service in file.stem):
-                    files.append(file)
+                    files.append(file.stem)
         return ";".join(files)
 
     def get_country_file(self, country, service, month):
