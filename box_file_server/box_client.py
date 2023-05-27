@@ -30,6 +30,7 @@ class BoxClient:
         entries = Path(dir_path)
         files = []
         for e in entries.iterdir():
+            print(e)
             if(service in e.stem):
                 files.append(e)
         return ";".join(files)
