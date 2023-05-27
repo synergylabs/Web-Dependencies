@@ -29,10 +29,10 @@ class BoxClient:
         dir_path = f"./files/countries/{country}/"
         entries = Path(dir_path)
         files = []
-        for e in entries.iterdir():
-            print(e)
-            if(service in e.stem):
-                files.append(e)
+        for folder in entries.iterdir():
+            for file in folder.iterdir():
+                if(service in file.stem):
+                    files.append(file)
         return ";".join(files)
 
     def get_country_file(self, country, service, month):
