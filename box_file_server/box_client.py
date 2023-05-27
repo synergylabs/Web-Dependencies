@@ -29,7 +29,7 @@ class BoxClient:
         dir_path = f"./files/countries/{country}/"
         entries = Path(dir_path)
         files = set()
-        for e in entries:
+        for e in entries.iterdir():
             if(service in e):
                 files.add(e)
         return files
