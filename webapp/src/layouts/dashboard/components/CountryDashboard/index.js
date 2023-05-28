@@ -119,7 +119,7 @@ const CountryDashboard = (props) => {
   const [searchResult, setSearchResult] = useState(initialResult);
   const [searchHeading, setSearchHeading] = useState("Providers");
   const [open, setOpen] = useState(false);
-  const [fileList, setFileList] = useState([]);
+  const [fileList, setFileList] = useState(["202210"]);
 
   function getWebsites(privateAndThird) {
     return Object.keys(privateAndThird).map((key, index) => ( 
@@ -226,7 +226,6 @@ const CountryDashboard = (props) => {
   }
   const onSnapshotChange = (e) => {
     const curSnapshot = e.target.value;
-    console.log(curSnapshot);
     setSnapshot(curSnapshot);
     setLoading(true);
     getData(country, service, curSnapshot)
