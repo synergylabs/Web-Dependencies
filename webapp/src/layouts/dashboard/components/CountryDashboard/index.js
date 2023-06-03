@@ -55,6 +55,8 @@ import raw from "data/cdn_dns";
 // const data_ready = new Set([])
 const cache = {}
 const top_n = 5;
+// const api_address = "http://localhost";
+
 const getTop5Providers = (nodes) => {
   nodes = nodes.filter((n) => n.nodeType === "Provider").sort((n1, n2) => n2.conc.size - n1.conc.size);
   return nodes.slice(0, top_n);
@@ -144,8 +146,12 @@ const CountryDashboard = (props) => {
   }
 
   function get_file_list(country, service) {
-    fetch(`http://webdependency.andrew.cmu.edu:5000/country/${country}/service/${service}/list`).then((r) => r.json())
+    fetch(`${process.env.REACT_APP_API_ADDRESS}:5000/country/${country}/service/${service}/list`).then((r) => {
+      console.log(r);
+      r.json();
+  })
     .then((response) => {
+      console.log(response);
       let files = response.data.split(";")
       setFileList(files)
     });
@@ -171,7 +177,7 @@ const CountryDashboard = (props) => {
       setLoading(false);
       // getServiceStats(country,service,month)
     } else {
-      fetch(`http://webdependency.andrew.cmu.edu:5000/country/${country}/service/${service}/month/${month}`)
+      fetch(`$${process.env.REACT_APP_API_ADDRESS}:5000/country/${country}/service/${service}/month/${month}`)
       .then((r) => r.json())
       .then((response) => {
         const [graph, allNodes, clientNum, thirdNum, criticalNum, redundantNum, privateAndThirdNum,privateAndThird] = getGraphStats(response.data, service);
