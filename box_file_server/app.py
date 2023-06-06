@@ -11,7 +11,7 @@ def home():
 
 
 @app.route("/country/<country>/service/<service>/month/<month>")
-@cross_origin(origins=["http://localhost:8080", "http://webdependency.andrew.cmu.edu:8080","http://localhost","http://webdependency.andrew.cmu.edu"])
+@cross_origin(origins=["http://localhost:8080", "http://webdependency.andrew.cmu.edu:8080","http://localhost","http://webdependency.andrew.cmu.edu","https://localhost:8080", "https://webdependency.andrew.cmu.edu:8080","https://localhost","https://webdependency.andrew.cmu.edu"])
 def get_file(country, service, month):
     file_content = box_client.get_country_file(country, service, month)
     return {
@@ -19,7 +19,7 @@ def get_file(country, service, month):
     }
 
 @app.route("/country/<country>/service/<service>/list")
-@cross_origin(origins=["http://localhost:8080", "http://webdependency.andrew.cmu.edu:8080","http://localhost","http://webdependency.andrew.cmu.edu"])
+@cross_origin(origins=["http://localhost:8080", "http://webdependency.andrew.cmu.edu:8080","http://localhost","http://webdependency.andrew.cmu.edu","https://localhost:8080", "https://webdependency.andrew.cmu.edu:8080","https://localhost","https://webdependency.andrew.cmu.edu"])
 def get_file_lists(country, service):
     file_list = box_client.get_file_lists(country, service)
     return {
@@ -28,7 +28,7 @@ def get_file_lists(country, service):
 
 
 @app.route("/<country>/<service>/<month>/graph")
-@cross_origin(origins=["http://localhost:8080", "http://webdependency.andrew.cmu.edu:8080","http://localhost","http://webdependency.andrew.cmu.edu"])
+@cross_origin(origins=["http://localhost:8080", "http://webdependency.andrew.cmu.edu:8080","http://localhost","http://webdependency.andrew.cmu.edu","https://localhost:8080", "https://webdependency.andrew.cmu.edu:8080","https://localhost","https://webdependency.andrew.cmu.edu"])
 def get_graph_file(country, service, month):
     file_content = box_client.get_graph_file(country, service, month)
     return {
@@ -37,7 +37,7 @@ def get_graph_file(country, service, month):
 
 
 @app.route("/<country>/<service>/<month>/provider")
-@cross_origin(origins=["http://localhost:8080", "http://webdependency.andrew.cmu.edu:8080","http://localhost","http://webdependency.andrew.cmu.edu"])
+@cross_origin(origins=["http://localhost:8080", "http://webdependency.andrew.cmu.edu:8080","http://localhost","http://webdependency.andrew.cmu.edu","https://localhost:8080", "https://webdependency.andrew.cmu.edu:8080","https://localhost","https://webdependency.andrew.cmu.edu"])
 def get_provider_stats(country, service, month):
     file_content = box_client.get_provider_stats(country, service, month)
     return {
@@ -46,7 +46,7 @@ def get_provider_stats(country, service, month):
 
 
 @app.route("/<country>/<service>/<month>/client")
-@cross_origin(origins=["http://localhost:8080", "http://webdependency.andrew.cmu.edu:8080","http://localhost","http://webdependency.andrew.cmu.edu"])
+@cross_origin(origins=["http://localhost:8080", "http://webdependency.andrew.cmu.edu:8080","http://localhost","http://webdependency.andrew.cmu.edu","https://localhost:8080", "https://webdependency.andrew.cmu.edu:8080","https://localhost","https://webdependency.andrew.cmu.edu"])
 def get_client_stats(country, service, month):
     file_content = box_client.get_client_stats(country, service, month)
     return {
