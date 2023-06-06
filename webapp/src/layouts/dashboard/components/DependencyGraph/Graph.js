@@ -10,7 +10,7 @@ function Graph(props) {
   const { graphData, service } = props;
   const fgRef = useRef();
   var width = 600;
-  var height = 700;
+  var height = 900;
   useEffect(() => {
     const fg = fgRef.current;
     fg.d3Force("center", null);
@@ -51,7 +51,7 @@ function Graph(props) {
     <ForceGraph2D
       ref={fgRef}
       width={700}
-      height={700}
+      height={900}
       graphData={graphData}
       d3AlphaDecay={0.25}
       d3VelocityDecay={0.25}

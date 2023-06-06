@@ -77,6 +77,7 @@ const getGraphStats = (text, service) => {
 }
 
 function getPercentage(value, total) {
+  console.log(value, total)
   return Math.round(100*value/total);
 }
 
@@ -146,12 +147,9 @@ const CountryDashboard = (props) => {
   }
 
   function get_file_list(country, service) {
-    fetch(`${process.env.REACT_APP_API_ADDRESS}:5000/country/${country}/service/${service}/list`).then((r) => {
-      console.log(r);
-      r.json();
-  })
+    fetch(`${process.env.REACT_APP_API_ADDRESS}:5000/country/${country}/service/${service}/list`)
+    .then((r) => r.json())
     .then((response) => {
-      console.log(response);
       let files = response.data.split(";")
       setFileList(files)
     });
@@ -164,10 +162,11 @@ const CountryDashboard = (props) => {
       const [graph, allNodes, clientNum, thirdNum, criticalNum, redundantNum, privateAndThirdNum,privateAndThird] = getGraphStats(response.data, service);
       // const table_rows = createTable(response.data)
         // setTable(table_rows);
+      
       setGraph(graph);
       setAllNodes(allNodes);
-      setAllClientNum(clientNum)
-      setThirdOnlyNum(thirdNum)
+      setAllClientNum(clientNum);
+      setThirdOnlyNum(thirdNum);
       setCriticalNum(criticalNum);
       setredundantNum(redundantNum);
       setPrivateAndThirdNum(privateAndThirdNum);
@@ -175,13 +174,14 @@ const CountryDashboard = (props) => {
       setInitialResult(getTop5Providers(allNodes));
       setSearchResult(getTop5Providers(allNodes));
       setLoading(false);
+      console.log(thirdOnlyNum, "third", thirdNum);
       // getServiceStats(country,service,month)
     } else {
-      fetch(`$${process.env.REACT_APP_API_ADDRESS}:5000/country/${country}/service/${service}/month/${month}`)
+      fetch(`${process.env.REACT_APP_API_ADDRESS}:5000/country/${country}/service/${service}/month/${month}`)
       .then((r) => r.json())
       .then((response) => {
         const [graph, allNodes, clientNum, thirdNum, criticalNum, redundantNum, privateAndThirdNum,privateAndThird] = getGraphStats(response.data, service);
-        const table_rows = createTable(response.data)
+        // const table_rows = createTable(response.data)
           // setTable(table_rows);
         setGraph(graph);
         setAllNodes(allNodes);
@@ -256,7 +256,7 @@ const CountryDashboard = (props) => {
               <Graph graphData={graph} service={service} ></Graph>
             </Grid>
             <Grid item xs={12} md={4} lg={4}>
-              <Search onSearchInputChange={onSearchByLabel} searchResult={searchResult} heading={searchHeading} service={service} servicedep={serviceNodes} />
+              <Search onSearchInputChange={onSearchByLabel} searchResult={searchResult} heading={searchHeading} service={service} servicedep={serviceNodes} totalClients={allClientNum} />
             </Grid>
           </Grid>
         </MDBox>

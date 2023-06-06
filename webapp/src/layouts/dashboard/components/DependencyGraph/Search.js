@@ -89,9 +89,13 @@ import DeleteIcon from '@mui/icons-material/Delete';
 
 import Config from "./Config"
 
+function get_percentage(num, total) {
+  console.log(total);
+  return (num / total * 100).toFixed(2)
+}
 function Search(props) {
-  const { searchTerm, searchResult, onSearchInputChange, heading, service, servicedep } = props;
-
+  const { searchTerm, searchResult, onSearchInputChange, heading, service, servicedep, totalClients } = props;
+  console.log( totalClients)
   const searchResultList = searchResult.map((node) => {
     const isProvider = node.nodeType === "Provider";
     const color = isProvider ? Config.ProviderColor : Config.ClientColor;
@@ -123,9 +127,9 @@ function Search(props) {
               >
                 {`Type: ${node.type}`}
                 <br></br>
-                {`Concentration: ${node.conc.size}`}
+                { `Concentration: ${node.conc.size}  (${get_percentage(node.conc.size,  totalClients)}%)`}
                 <br></br>
-                {node.type == "Third" && `Impact: ${node.impact.size}`}
+                {node.type == "Third" && `Impact: ${node.impact.size}  (${get_percentage(node.impact.size,  totalClients)}%)`}
                 <br></br>
                 {service == "cdn" && `DNS: ${[...node.dns].join(', ')}`}
             </Typography>}

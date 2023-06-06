@@ -22,30 +22,30 @@ export const getCaGraphStats = (text) => {
     const rank = line[0];
     const stapling = line[4];
     if (providerType === "Pvt") {
-      clientPrivateProviders.add(client);
-      allKnownClients.add(client);
+      clientPrivateProviders.add(client[1]);
+      allKnownClients.add(client[1]);
     } else if (providerType === "unknown") {
-      clientUnknownProviders.add(client);
+      clientUnknownProviders.add(client[1]);
     } else if (providerType === "Third") {
-      allKnownClients.add(client);
+      allKnownClients.add(client[1]);
 
-      if (!clientThirdProviders.hasOwnProperty(client)) {
-        clientThirdProviders[client] = new Set();
+      if (!clientThirdProviders.hasOwnProperty(client[1])) {
+        clientThirdProviders[client[1]] = new Set();
       }
 
-      clientThirdProviders[client].add(provider);
+      clientThirdProviders[client[1]].add(provider);
     }
     if (!providerClients.hasOwnProperty(provider)) {
       providerClients[provider] = new Set();
     }
-    if (!providerClients[provider].has(client)) {
-      providerClients[provider].add(client);
+    if (!providerClients[provider].has(client[1])) {
+      providerClients[provider].add(client[1]);
 
-      if (clientIndices.hasOwnProperty(client)) {
-        const clientIndex = clientIndices[client];
+      if (clientIndices.hasOwnProperty(client[1])) {
+        const clientIndex = clientIndices[client[1]];
         nodes[clientIndex][providerType].add(provider);
       } else {
-        clientIndices[client] = index;
+        clientIndices[client[1]] = index;
         nodes.push({
           id: index,
           rank: rank,
@@ -307,30 +307,30 @@ export const getCdnGraphStats = (text) => {
     const provider = line[2];
     const rank = line[0];
     if (providerType === "Pvt") {
-      clientPrivateProviders[client] = provider;
-      allKnownClients.add(client);
+      clientPrivateProviders[client[1]] = provider;
+      allKnownClients.add(client[1]);
     } else if (providerType === "unknown") {
-      clientUnknownProviders.add(client);
+      clientUnknownProviders.add(client[1]);
     } else if (providerType === "Third") {
-      allKnownClients.add(client);
+      allKnownClients.add(client[1]);
 
-      if (!clientThirdProviders.hasOwnProperty(client)) {
-        clientThirdProviders[client] = new Set();
+      if (!clientThirdProviders.hasOwnProperty(client[1])) {
+        clientThirdProviders[client[1]] = new Set();
       }
 
-      clientThirdProviders[client].add(provider);
+      clientThirdProviders[client[1]].add(provider);
     }
     if (!providerClients.hasOwnProperty(provider)) {
       providerClients[provider] = new Set();
     }
-    if (!providerClients[provider].has(client)) {
-      providerClients[provider].add(client);
+    if (!providerClients[provider].has(client[1])) {
+      providerClients[provider].add(client[1]);
 
-      if (clientIndices.hasOwnProperty(client)) {
-        const clientIndex = clientIndices[client];
+      if (clientIndices.hasOwnProperty(client[1])) {
+        const clientIndex = clientIndices[client[1]];
         nodes[clientIndex][providerType].add(provider);
       } else {
-        clientIndices[client] = index;
+        clientIndices[client[1]] = index;
         nodes.push({
           id: index,
           rank: rank,
@@ -460,11 +460,11 @@ export const getDnsGraphStats = (text) => {
     const rank = line[0];
     if (providerType === "Pvt") {
       clientPrivateProviders[client] = provider;
-      allKnownClients.add(client);
+      allKnownClients.add(client[1]);
     } else if (providerType === "unknown") {
-      clientUnknownProviders.add(client);
+      clientUnknownProviders.add(client[1]);
     } else if (providerType === "Third") {
-      allKnownClients.add(client);
+      allKnownClients.add(client[1]);
       if (!clientThirdProviders.hasOwnProperty(client)) {
         clientThirdProviders[client] = new Set();
       }

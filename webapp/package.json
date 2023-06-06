@@ -7,11 +7,11 @@
   "description": "Web dependency dashboard",
   "homepage": ".",
   "bugs": {
-    "url": "https://github.com/creativetimofficial/material-dashboard-react/issues"
+    "url": "https://github.com/synergylabs/Web-Dependencies/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/creativetimofficial/material-dashboard-react.git"
+    "url": "git+https://github.com/synergylabs/Web-Dependencies.git"
   },
   "engines": {
     "node": "14 || 15 || 16",
