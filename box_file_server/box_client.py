@@ -34,7 +34,8 @@ class BoxClient:
                 files = self.client.folder(folder_id=subfolder.id).get_items()
                 for file in files:
                     if file_name_prefix in file.name:
-                        output_files.append(subfolder.name)
+                        tag = subfolder.name.split("-")[1]
+                        output_files.append(tag)
         print(output_files)
         return ";".join(output_files)
         
