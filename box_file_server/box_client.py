@@ -30,11 +30,11 @@ class BoxClient:
         output_files = []
         subfolders = self.client.folder(folder_id=self.root_folder_id).get_items()
         for subfolder in subfolders:
-            print(subfolder.name, subfolder.type)
-            files = self.client.folder(folder_id=subfolder.id).get_items()
-            for file in files:
-                if file_name_prefix in file.name:
-                    output_files.append(subfolder.name)
+            if(subfolder.type == "folder"):
+                files = self.client.folder(folder_id=subfolder.id).get_items()
+                for file in files:
+                    if file_name_prefix in file.name:
+                        output_files.append(subfolder.name)
         print(output_files)
         return ";".join(output_files)
         
