@@ -54,7 +54,7 @@ const routes = [
     name: "Home",
     key: "home",
     icon: <HomeIcon />,
-    route: "./",
+    route: "/",
     component: <Home />,
   },
   {
