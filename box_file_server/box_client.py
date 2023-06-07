@@ -48,6 +48,7 @@ class BoxClient:
     
     def get_file_lists(self, country, service, month):
         if(self.last_updated != month):
+            print(country, service, month)
             files = self.get_file_list_from_box(country, service)
             self.last_updated = month
         else:
