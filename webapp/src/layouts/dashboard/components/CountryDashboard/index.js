@@ -222,13 +222,14 @@ const CountryDashboard = (props) => {
       setSearchHeading("results")
     }
   };
-
+  
   const onServiceChange = (e) => {
     const curService = e.target.value;
+    const month = snapshot;
     setService(curService);
     setLoading(true);
-    getData(country, curService, "202210")
-    get_file_list(country, curService)
+    getData(country, curService, month)
+    get_file_list(country, curService, month)
   }
   const onSnapshotChange = (e) => {
     const curSnapshot = e.target.value;
@@ -240,8 +241,12 @@ const CountryDashboard = (props) => {
   if (country && country !== curCountry ) {
     setcurCountry(country);
     setLoading(true);
+    let newDate = new Date()
+    let month = newDate.getMonth() - 2;
+    let year = newDate.getFullYear();
+    console.log(month, year)
     getData(country, service, "202210")
-    get_file_list(country, service)
+    get_file_list(country, service,"202210")
   }
 
   return (
