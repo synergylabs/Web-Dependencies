@@ -12,7 +12,7 @@ class BoxClient:
         self.root_folder_id = "182556826473"
         self.enterprise_id = "81467"
         self.client = None
-
+        self.last_updated = None
         self.init_client()
 
     def init_client(self):
@@ -25,7 +25,17 @@ class BoxClient:
         )
         self.client = Client(auth)
 
-    def get_file_lists(self, country, service):
+    def get_file_list_from_box(country, service):
+        file_name_prefix = f'{country}-{service}'
+        files = []
+        subfolders = self.client.folder(folder_id=self.root_folder_id).get_items()
+        for subfolder in subfolders:
+            files = self.client.folder(folder_id=subfolder.id).get_items()
+            for file in files:
+                if file_name_prefix in file.name:
+                    files.append(subfolder.stem)
+            return ";".join(files)
+    def get_local_file_lists(country, service):
         dir_path = f"./files/countries/{country}/"
         entries = Path(dir_path)
         files = []
@@ -35,6 +45,17 @@ class BoxClient:
                 if(service in file.stem):
                     files.append(folder.stem)
         return ";".join(files)
+    
+    def get_file_lists(self, country, service, month):
+        if(self.last_updated != month):
+            files = self.get_file_list_from_box(country, service)
+            self.last_updated = month
+        else:
+            files = self.get_local_file_lists(country, service)
+        
+        return files
+        
+        
 
     def get_country_file(self, country, service, month):
 
