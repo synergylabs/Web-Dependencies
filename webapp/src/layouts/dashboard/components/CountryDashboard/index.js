@@ -146,8 +146,8 @@ const CountryDashboard = (props) => {
       });
   }
 
-  function get_file_list(country, service) {
-    fetch(`${process.env.REACT_APP_API_ADDRESS}:5000/country/${country}/service/${service}/list`)
+  function get_file_list(country, service,month) {
+    fetch(`${process.env.REACT_APP_API_ADDRESS}:5000/country/${country}/service/${service}/month/${month}/list`)
     .then((r) => r.json())
     .then((response) => {
       let files = response.data.split(";")

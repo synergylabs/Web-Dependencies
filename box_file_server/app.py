@@ -18,10 +18,10 @@ def get_file(country, service, month):
         "data": file_content,
     }
 
-@app.route("/country/<country>/service/<service>/list")
+@app.route("/country/<country>/service/<service>/month/<month>/list")
 @cross_origin(origins=["http://localhost:8080", "http://webdependency.andrew.cmu.edu:8080","http://localhost","http://webdependency.andrew.cmu.edu","https://localhost:8080", "https://webdependency.andrew.cmu.edu:8080","https://localhost","https://webdependency.andrew.cmu.edu","https://synergylabs.org"])
-def get_file_lists(country, service):
-    file_list = box_client.get_file_lists(country, service)
+def get_file_lists(country, service, month):
+    file_list = box_client.get_file_lists(country, service, month)
     return {
         "data": file_list,
     }
