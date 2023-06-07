@@ -244,13 +244,15 @@ const CountryDashboard = (props) => {
     let newDate = new Date()
     let month = newDate.getMonth() - 1;
     let year = newDate.getFullYear();
+    let mysnapshot = "202210"
     if(month < 10) {
-      snapshot = `${year}0${month}`
+      mysnapshot = `${year}0${month}`
     } else {
-      snapshot = `${year}${month}`
+      mysnapshot = `${year}${month}`
     }
-    get_file_list(country, service,snapshot)
+    get_file_list(country, service,mysnapshot)
     const latest_snapshot = fileList[-1]
+    setSnapshot(latest_snapshot)
     getData(country, service, latest_snapshot)
    
   }
