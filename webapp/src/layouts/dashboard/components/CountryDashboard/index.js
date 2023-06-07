@@ -252,7 +252,7 @@ const CountryDashboard = (props) => {
     }
     
     get_file_list(country, service,mysnapshot)
-    const latest_snapshot = fileList[-1]
+    const latest_snapshot = fileList.at(-1)
     console.log(mysnapshot, latest_snapshot, fileList)
     setSnapshot(latest_snapshot)
     getData(country, service, latest_snapshot)
