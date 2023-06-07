@@ -27,14 +27,14 @@ class BoxClient:
 
     def get_file_list_from_box(self, country, service):
         file_name_prefix = f'{country}-{service}'
-        files = []
+        output_files = []
         subfolders = self.client.folder(folder_id=self.root_folder_id).get_items()
         for subfolder in subfolders:
             files = self.client.folder(folder_id=subfolder.id).get_items()
             for file in files:
                 if file_name_prefix in file.name:
-                    files.append(subfolder.stem)
-            return ";".join(files)
+                    output_files.append(subfolder.stem)
+            return ";".join(output_files)
         
     def get_local_file_lists(self, country, service):
         dir_path = f"./files/countries/{country}/"
