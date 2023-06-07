@@ -150,6 +150,7 @@ const CountryDashboard = (props) => {
     fetch(`${process.env.REACT_APP_API_ADDRESS}:5000/country/${country}/service/${service}/month/${month}/list`)
     .then((r) => r.json())
     .then((response) => {
+      console.log(response)
       let files = response.data.split(";")
       setFileList(files)
     });
