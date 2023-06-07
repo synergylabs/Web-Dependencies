@@ -33,7 +33,7 @@ class BoxClient:
             files = self.client.folder(folder_id=subfolder.id).get_items()
             for file in files:
                 if file_name_prefix in file.name:
-                    output_files.append(subfolder.stem)
+                    output_files.append(subfolder.name)
             return ";".join(output_files)
         
     def get_local_file_lists(self, country, service):
