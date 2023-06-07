@@ -21,7 +21,7 @@ import App from "App";
 // Material Dashboard 2 React Context Provider
 import { MaterialUIControllerProvider } from "context";
 ReactDOM.render(
-  <BrowserRouter>
+  <BrowserRouter basename={process.env.PUBLIC_URL}>
     <MaterialUIControllerProvider>
       <App />
     </MaterialUIControllerProvider>
