@@ -34,7 +34,8 @@ class BoxClient:
             for file in files:
                 if file_name_prefix in file.name:
                     output_files.append(subfolder.name)
-            return ";".join(output_files)
+        print(output_files)
+        return ";".join(output_files)
         
     def get_local_file_lists(self, country, service):
         dir_path = f"./files/countries/{country}/"
