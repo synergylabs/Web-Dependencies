@@ -172,7 +172,7 @@
 1000,nih.gov,godaddycominc,Pvt,True
 1000,marketwatch.com,amazon,Third,True
 1000,calculator.net,godaddycominc,Third,False
-1000,tmz.com,ocsp.e2m01.amazontrust.com,Amazon,Third,True
+1000,tmz.com,amazon,Third,True
 1000,starfall.com,godaddycominc,Third,False
 1000,imdb.com,amazon,Third,True
 1000,celebjihad.com,digicertinc,Third,True
@@ -1478,7 +1478,7 @@
 5000,greatclips.com,digicertinc,Third,True
 5000,10faq.com,digicertinc,Third,True
 5000,albert.io,amazon,Third,False
-5000,websight.blue,ocsp.e2m02.amazontrust.com,Amazon,Third,False
+5000,websight.blue,amazon,Third,False
 5000,milesplit.com,amazon,Third,False
 5000,llbean.com,digicertinc,Third,True
 5000,topstreams.info,letsencrypt,Third,False
@@ -2383,7 +2383,7 @@
 5000,greatclips.com,digicertinc,Third,True
 5000,10faq.com,digicertinc,Third,True
 5000,albert.io,amazon,Third,False
-5000,websight.blue,ocsp.e2m02.amazontrust.com,Amazon,Third,False
+5000,websight.blue,amazon,Third,False
 5000,milesplit.com,amazon,Third,False
 5000,llbean.com,digicertinc,Third,True
 5000,topstreams.info,letsencrypt,Third,False
@@ -3046,7 +3046,7 @@
 5000,greatclips.com,digicertinc,Third,True
 5000,10faq.com,digicertinc,Third,True
 5000,albert.io,amazon,Third,False
-5000,websight.blue,ocsp.e2m02.amazontrust.com,Amazon,Third,False
+5000,websight.blue,amazon,Third,False
 5000,milesplit.com,amazon,Third,False
 5000,llbean.com,digicertinc,Third,True
 5000,topstreams.info,letsencrypt,Third,False
@@ -8122,7 +8122,7 @@
 10000,cashnetusa.com,godaddycominc,Third,False
 10000,nitter.net,letsencrypt,Third,False
 10000,kfor.com,letsencrypt,Third,True
-10000,toofab.com,ocsp.e2m01.amazontrust.com,Amazon,Third,True
+10000,toofab.com,amazon,Third,True
 10000,betterimpact.com,googletrustservicesllc,Third,True
 10000,actblue.com,amazon,Third,False
 10000,self.com,globalsignnv-sa,Third,True
@@ -8693,7 +8693,7 @@
 10000,techsmart.codes,amazon,Third,False
 10000,sxyprn.net,letsencrypt,Third,True
 10000,duboku.tv,digicertinc,Third,True
-10000,paytrace.com,ocsp.e2m01.amazontrust.com,Amazon,Third,False
+10000,paytrace.com,amazon,Third,False
 10000,mangabtt.com,googletrustservicesllc,Third,True
 10000,24hourfitness.com,godaddycominc,Pvt,True
 10000,lake-link.com,digicertinc,Third,True
