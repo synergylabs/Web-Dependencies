@@ -315,7 +315,7 @@ const CountryDashboard = (props) => {
                   {service == "ocsp" && "Stapling Support"}
                   </MDTypography>
                   <MDTypography pr={5} display="inline" variant="h2" color="white">
-                    {thirdOnlyNum}
+                    {thirdOnlyNum.toLocaleString()}
                   </MDTypography>
                   <MDTypography display="inline" variant="h4" color="white">
                     {getPercentage(thirdOnlyNum, allClientNum)}%
@@ -333,7 +333,7 @@ const CountryDashboard = (props) => {
                     Private and Third-party
                     </MDTypography>
                     <MDTypography pr={5} display="inline" variant="h2" color="white">
-                      {privateAndThirdNum}
+                      {privateAndThirdNum.toLocaleString()}
                     </MDTypography>
                     <MDTypography display="inline" variant="h4" color="white">
                       {getPercentage(privateAndThirdNum, allClientNum)}%
