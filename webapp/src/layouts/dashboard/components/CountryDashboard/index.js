@@ -315,13 +315,13 @@ const CountryDashboard = (props) => {
               <Card style={{ backgroundColor: "#326a1a" }} >
                 <CardContent>
                   <MDTypography color="white">
-                    Redundancy
+                    Multiple Third
                   </MDTypography>
                   <MDTypography pr={5} display="inline" variant="h2" color="white">
-                    {redundantNum}
+                    {thirdOnlyNum}
                   </MDTypography>
                   <MDTypography display="inline" variant="h4" color="white">
-                    {getPercentage(redundantNum, allClientNum)}%
+                    {getPercentage(thirdOnlyNum, allClientNum)}%
                   </MDTypography>
                 </CardContent>
               </Card>
