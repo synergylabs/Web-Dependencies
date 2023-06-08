@@ -90,7 +90,7 @@ export const getCaGraphStats = (text) => {
 
   // Client centric stats
   let thirdNum = 0;
-  let thirdOnlyNum = 0;
+  let staplingNum = 0;
   let criticalNum = 0;
   let privateAndThirdNum = 0;
 
@@ -98,12 +98,10 @@ export const getCaGraphStats = (text) => {
     if (!clientUnknownProviders.has(c)) {
       if (clientThirdProviders.hasOwnProperty(c)) {
         thirdNum++;
-      }
-      if (clientThirdProviders.hasOwnProperty(c)) {
-        thirdOnlyNum++;
-
         if (!staplingEnabledClients.has(c)) {
           criticalNum++;
+        } else {
+          staplingNum++;
         }
       }
     }
