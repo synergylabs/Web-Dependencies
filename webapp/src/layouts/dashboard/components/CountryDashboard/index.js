@@ -117,7 +117,6 @@ const CountryDashboard = (props) => {
   const [thirdOnlyNum, setThirdOnlyNum] = useState(0);
   const [criticalNum, setCriticalNum] = useState(0);
   const [privateAndThirdNum, setPrivateAndThirdNum] = useState(0);
-  const [privateAndThird, setPrivateAndThird] = useState(0);
   const [initialResult, setInitialResult] = useState([]);
   const [searchResult, setSearchResult] = useState(initialResult);
   const [searchHeading, setSearchHeading] = useState("Providers");
@@ -159,7 +158,7 @@ const CountryDashboard = (props) => {
     if(cache.hasOwnProperty(data_name)) {
       console.log("found in cache")
       const response = cache[data_name]
-      const [graph, allNodes, clientNum, thirdNum, criticalNum, thirdOnlyNum, privateAndThirdNum,privateAndThird] = getGraphStats(response.data, service);
+      const [graph, allNodes, clientNum, thirdNum, criticalNum, thirdOnlyNum, privateAndThirdNum] = getGraphStats(response.data, service);
         // const table_rows = createTable(response.data)
           // setTable(table_rows);
         setGraph(graph);
@@ -169,7 +168,6 @@ const CountryDashboard = (props) => {
         setThirdOnlyNum(thirdOnlyNum)
         setCriticalNum(criticalNum);
         setPrivateAndThirdNum(privateAndThirdNum);
-        setPrivateAndThird(privateAndThird);
         setInitialResult(getTop5Providers(allNodes));
         setSearchResult(getTop5Providers(allNodes));
         setLoading(false);
@@ -178,7 +176,7 @@ const CountryDashboard = (props) => {
       fetch(`${process.env.REACT_APP_API_ADDRESS}:5000/country/${country}/service/${service}/month/${month}`)
       .then((r) => r.json())
       .then((response) => {
-        const [graph, allNodes, clientNum, thirdNum, criticalNum, thirdOnlyNum, privateAndThirdNum,privateAndThird] = getGraphStats(response.data, service);
+        const [graph, allNodes, clientNum, thirdNum, criticalNum, thirdOnlyNum, privateAndThirdNum] = getGraphStats(response.data, service);
         // const table_rows = createTable(response.data)
           // setTable(table_rows);
         setGraph(graph);
@@ -188,7 +186,6 @@ const CountryDashboard = (props) => {
         setThirdOnlyNum(thirdOnlyNum)
         setCriticalNum(criticalNum);
         setPrivateAndThirdNum(privateAndThirdNum);
-        setPrivateAndThird(privateAndThird);
         setInitialResult(getTop5Providers(allNodes));
         setSearchResult(getTop5Providers(allNodes));
         setLoading(false);

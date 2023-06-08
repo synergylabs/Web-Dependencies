@@ -324,70 +324,74 @@ export const getCdnGraphStats = (text) => {
     if (!providerClients.hasOwnProperty(provider)) {
       providerClients[provider] = new Set();
     }
-    if (!providerClients[provider].has(client[1])) {
       providerClients[provider].add(client[1]);
 
-      if (clientIndices.hasOwnProperty(client[1])) {
-        const clientIndex = clientIndices[client[1]];
-        nodes[clientIndex][providerType].add(provider);
-      } else {
-        clientIndices[client[1]] = index;
-        nodes.push({
-          id: index,
-          rank: rank,
-          label: client[1],
-          nodeType: "Client",
-          val: 1,
-          Pvt: new Set(),
-          Third: new Set(),
-          unknown: new Set(),
-        });
-        nodes[index][providerType].add(provider);
-        index += 1;
-      }
-      if (providerIndices.hasOwnProperty(provider)) {
-        const providerIndex = providerIndices[provider];
-        nodes[providerIndex]["conc"].add(client[1]);
-      } else {
-        providerIndices[provider] = index;
-        nodes.push({
-          id: index,
-          label: provider,
-          nodeType: "Provider",
-          conc: new Set(),
-          impact: new Set(),
-          type: providerType,
-          dns: dns_hard_copy.hasOwnProperty(provider) ? dns_hard_copy[provider] : ["ultradns"],
-        });
-        // console.log(nodes[index].dns, dns_hard_copy[provider]);
-        nodes[index]["conc"].add(client[1]);
-        index += 1;
-      }
+    if (clientIndices.hasOwnProperty(client[1])) {
+      const clientIndex = clientIndices[client[1]];
+      nodes[clientIndex][providerType].add(provider);
+    } else {
+      clientIndices[client[1]] = index;
+      nodes.push({
+        id: index,
+        rank: rank,
+        label: client[1],
+        nodeType: "Client",
+        val: 1,
+        Pvt: new Set(),
+        Third: new Set(),
+        unknown: new Set(),
+      });
+      nodes[index][providerType].add(provider);
+      index += 1;
+    }
+    if (providerIndices.hasOwnProperty(provider)) {
+      const providerIndex = providerIndices[provider];
+      nodes[providerIndex]["conc"].add(client[1]);
+    } else {
+      providerIndices[provider] = index;
+      nodes.push({
+        id: index,
+        label: provider,
+        nodeType: "Provider",
+        conc: new Set(),
+        impact: new Set(),
+        type: providerType,
+        dns: dns_hard_copy.hasOwnProperty(provider) ? dns_hard_copy[provider] : ["ultradns"],
+      });
+      // console.log(nodes[index].dns, dns_hard_copy[provider]);
+      nodes[index]["conc"].add(client[1]);
+      index += 1;
     }
   });
 
   // Client centric stats
+  let thirdNum = 0;
   let thirdOnlyNum = 0;
   let criticalNum = 0;
-  let redundantNum = 0;
   let privateAndThirdNum = 0;
 
   allKnownClients.forEach((c) => {
     if (!clientUnknownProviders.has(c)) {
       if (clientThirdProviders.hasOwnProperty(c)) {
-        if (clientThirdProviders[c].size > 1) {
-          redundantNum++;
-        }
+        thirdNum++;
       }
       if (clientPrivateProviders.hasOwnProperty(c) && clientThirdProviders.hasOwnProperty(c)) {
         privateAndThirdNum++;
-        redundantNum++;
-      } else if (clientThirdProviders.hasOwnProperty(c)) {
+      }
+      if (
+        clientThirdProviders.hasOwnProperty(c) &&
+        clientThirdProviders[c].size > 1 &&
+        !clientPrivateProviders.hasOwnProperty(c)
+      ) {
         thirdOnlyNum++;
+      }
 
-        if (clientThirdProviders[c].size == 1) {
-          criticalNum++;
-        }
+      if (
+        clientThirdProviders.hasOwnProperty(c) &&
+        clientThirdProviders[c].size == 1 &&
+        !clientPrivateProviders.hasOwnProperty(c)
+      ) {
+        criticalNum++;
       }
     }
   });
@@ -432,9 +436,9 @@ export const getCdnGraphStats = (text) => {
     graph,
     allNodes,
     allKnownClients.size,
-    thirdOnlyNum,
+    thirdNum,
     criticalNum,
-    redundantNum,
+    thirdOnlyNum,
     privateAndThirdNum,
   ];
 };
@@ -520,7 +524,6 @@ export const getDnsGraphStats = (text) => {
   let thirdOnlyNum = 0;
   let criticalNum = 0;
   let privateAndThirdNum = 0;
-  let privateAndThird = {};
 
   allKnownClients.forEach((c) => {
     if (!clientUnknownProviders.has(c)) {
@@ -529,11 +532,6 @@ export const getDnsGraphStats = (text) => {
       }
       if (clientPrivateProviders.hasOwnProperty(c) && clientThirdProviders.hasOwnProperty(c)) {
         privateAndThirdNum++;
-        if (!privateAndThird.hasOwnProperty(c)) {
-          privateAndThird[c] = new Set();
-        }
-        privateAndThird[c].add(clientPrivateProviders[c]);
-        privateAndThird[c].add(clientThirdProviders[c]);
       }
       if (
         clientThirdProviders.hasOwnProperty(c) &&
@@ -597,6 +595,5 @@ export const getDnsGraphStats = (text) => {
     criticalNum,
     thirdOnlyNum,
     privateAndThirdNum,
-    privateAndThird,
   ];
 };
