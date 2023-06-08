@@ -542,8 +542,8 @@ export const getDnsGraphStats = (text) => {
         clientThirdProviders.hasOwnProperty(c) &&
         clientThirdProviders[c].size > 1 && 
         !clientPrivateProviders.hasOwnProperty(c)
-        ) {
-          thirdOnlyNum++;
+      ) {
+        thirdOnlyNum++;
       }
 
       if (clientThirdProviders.hasOwnProperty(c) && clientThirdProviders[c].size == 1 && 
