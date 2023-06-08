@@ -456,7 +456,7 @@ export const getDnsGraphStats = (text) => {
     const line = oneData.split(",");
     const client = [line[0], line[1]];
     const providerType = line[3];
-    const provider = line[4];
+    const provider = line[2];
     const rank = line[0];
     if (providerType === "Pvt") {
       clientPrivateProviders[client[1]] = provider;
