@@ -537,13 +537,15 @@ export const getDnsGraphStats = (text) => {
         privateAndThird[c].add(clientPrivateProviders[c]);
         privateAndThird[c].add(clientThirdProviders[c]);
         redundantNum++;
-      } else if (clientThirdProviders.hasOwnProperty(c)) {
-        thirdOnlyNum++;
-
-        if (clientThirdProviders[c].size == 1) {
-          criticalNum++;
-        }
       }
+      if (clientThirdProviders.hasOwnProperty(c) && clientThirdProviders[c].size > 1 && !clientPrivateProviders.hasOwnProperty(c)) {
+        thirdOnlyNum++;
+      }
+
+      if (clientThirdProviders.hasOwnProperty(c) && clientThirdProviders[c].size == 1 && !clientPrivateProviders.hasOwnProperty(c)) {
+        criticalNum++;
+      }
+
     }
   });
 
