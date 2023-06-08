@@ -459,29 +459,29 @@ export const getDnsGraphStats = (text) => {
     const provider = line[4];
     const rank = line[0];
     if (providerType === "Pvt") {
-      clientPrivateProviders[client] = provider;
+      clientPrivateProviders[client[1]] = provider;
       allKnownClients.add(client[1]);
     } else if (providerType === "unknown") {
       clientUnknownProviders.add(client[1]);
     } else if (providerType === "Third") {
       allKnownClients.add(client[1]);
-      if (!clientThirdProviders.hasOwnProperty(client)) {
-        clientThirdProviders[client] = new Set();
+      if (!clientThirdProviders.hasOwnProperty(client[1])) {
+        clientThirdProviders[client[1]] = new Set();
       }
-      clientThirdProviders[client].add(provider);
+      clientThirdProviders[client[1]].add(provider);
     }
 
     if (!providerClients.hasOwnProperty(provider)) {
       providerClients[provider] = new Set();
     }
 
-    providerClients[provider].add(client);
+    providerClients[provider].add(client[1]);
 
-    if (clientIndices.hasOwnProperty(client)) {
-      const clientIndex = clientIndices[client];
+    if (clientIndices.hasOwnProperty(client[1])) {
+      const clientIndex = clientIndices[client[1]];
       nodes[clientIndex][providerType].add(provider);
     } else {
-      clientIndices[client] = index;
+      clientIndices[client[1]] = index;
       nodes.push({
         id: index,
         rank: rank,
