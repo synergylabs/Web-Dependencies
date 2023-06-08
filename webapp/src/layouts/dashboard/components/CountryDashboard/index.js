@@ -313,7 +313,9 @@ const CountryDashboard = (props) => {
               <Card style={{ backgroundColor: "#326a1a" }} >
                 <CardContent>
                   <MDTypography color="white">
-                    Multiple Third
+                  {service == "dns" && "Multiple Third"}
+                  {service == "cdn" && "Multiple Third"}
+                  {service == "ocsp" && "Stapling Support"}
                   </MDTypography>
                   <MDTypography pr={5} display="inline" variant="h2" color="white">
                     {thirdOnlyNum}
@@ -331,7 +333,9 @@ const CountryDashboard = (props) => {
                 <CardActionArea onClick={()=>setOpen(!open)}>
                   <CardContent>
                     <MDTypography color="white">
-                      Private and Third-party
+                    {service == "dns" && "Private and Third-party"}
+                    {service == "cdn" && "Private and Third-party"}
+                    {service == "ocsp" && "HTTPS Support"}
                     </MDTypography>
                     <MDTypography pr={5} display="inline" variant="h2" color="white">
                       {privateAndThirdNum}
