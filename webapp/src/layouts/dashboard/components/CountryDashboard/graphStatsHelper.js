@@ -97,9 +97,7 @@ export const getCaGraphStats = (text) => {
   allKnownClients.forEach((c) => {
     if (!clientUnknownProviders.has(c)) {
       if (clientThirdProviders.hasOwnProperty(c)) {
-        if (staplingEnabledClients.has(c)) {
-          redundantNum++;
-        }
+        thirdNum++;
       }
       if (clientThirdProviders.hasOwnProperty(c)) {
         thirdOnlyNum++;
@@ -151,9 +149,9 @@ export const getCaGraphStats = (text) => {
     graph,
     allNodes,
     allKnownClients.size,
-    thirdOnlyNum,
+    thirdNum,
     criticalNum,
-    redundantNum,
+    thirdOnlyNum,
     privateAndThirdNum,
   ];
 };
