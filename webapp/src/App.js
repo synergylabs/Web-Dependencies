@@ -64,15 +64,9 @@ export default function App() {
   // const [rtlCache, setRtlCache] = useState(null);
   const { pathname } = useLocation();
 
-  // Cache for the rtl
-  // useMemo(() => {
-  //   const cacheRtl = createCache({
-  //     key: "rtl",
-  //     stylisPlugins: [rtlPlugin],
-  //   });
-
-  //   setRtlCache(cacheRtl);
-  // }, []);
+  function getBasename(path) {
+    return path.substr(0, path.lastIndexOf("/"));
+  }
 
   // Open sidenav when mouse enter on mini sidenav
   const handleOnMouseEnter = () => {
@@ -149,7 +143,7 @@ export default function App() {
           <Sidenav
             color={sidenavColor}
             brand={(transparentSidenav && !darkMode) || whiteSidenav ? brandDark : brandWhite}
-            brandName="Web Dependency"
+            brandName="Web Dependency Observatory"
             routes={routes}
             onMouseEnter={handleOnMouseEnter}
             onMouseLeave={handleOnMouseLeave}

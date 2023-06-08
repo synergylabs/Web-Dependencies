@@ -5,6 +5,7 @@
   "author": "Aqsa Kashaf",
   "license": "MIT License",
   "description": "Web dependency dashboard",
+  "homepage": "./",
   "bugs": {
     "url": "https://github.com/synergylabs/Web-Dependencies/issues"
   },

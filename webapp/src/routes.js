@@ -110,7 +110,7 @@ const routes = [
   {
     type: "collapse",
     name: "Rwanda",
-    key: "/rw",
+    key: "rw",
     icon: <ReactCountryFlag countryCode="RW"/>,
     route: "/country/rw",
     component: <CountryDashboard country="rw" title="Rwanda"/>,
