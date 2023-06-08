@@ -36,7 +36,7 @@ export const getCaGraphStats = (text) => {
 
       clientThirdProviders[client[1]].add(provider);
     }
-    if(stapling == "True") {
+    if (stapling == "True") {
       staplingEnabledClients.add(client[1]);
     }
     if (!providerClients.hasOwnProperty(provider)) {
