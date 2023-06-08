@@ -284,10 +284,10 @@ const CountryDashboard = (props) => {
                     Third-party
                   </MDTypography>
                   <MDTypography pr={5} display="inline" variant="h2" color="white">
-                    {thirdOnlyNum.toLocaleString()}
+                    {thirdNum.toLocaleString()}
                   </MDTypography>
                   <MDTypography display="inline" variant="h4" color="white">
-                      {getPercentage(thirdOnlyNum, allClientNum)}%
+                      {getPercentage(thirdNum, allClientNum)}%
                   </MDTypography>
                 </CardContent>
               </Card>
