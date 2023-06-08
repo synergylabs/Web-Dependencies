@@ -524,7 +524,7 @@ export const getDnsGraphStats = (text) => {
 
   allKnownClients.forEach((c) => {
     if (!clientUnknownProviders.has(c)) {
-      if(clientThirdProviders.hasOwnProperty(c)) {
+      if (clientThirdProviders.hasOwnProperty(c)) {
         thirdNum++;
       }
       if (clientPrivateProviders.hasOwnProperty(c) && clientThirdProviders.hasOwnProperty(c)) {
