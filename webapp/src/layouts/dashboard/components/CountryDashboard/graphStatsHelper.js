@@ -516,18 +516,16 @@ export const getDnsGraphStats = (text) => {
   });
 
   // Client centric stats
+  let thirdNum = 0;
   let thirdOnlyNum = 0;
   let criticalNum = 0;
-  let redundantNum = 0;
   let privateAndThirdNum = 0;
   let privateAndThird = {};
 
   allKnownClients.forEach((c) => {
     if (!clientUnknownProviders.has(c)) {
-      if (clientThirdProviders.hasOwnProperty(c)) {
-        if (clientThirdProviders[c].size > 1) {
-          redundantNum++;
-        }
+      if(clientThirdProviders.hasOwnProperty(c)) {
+        thirdNum++;
       }
       if (clientPrivateProviders.hasOwnProperty(c) && clientThirdProviders.hasOwnProperty(c)) {
         privateAndThirdNum++;
@@ -536,7 +534,6 @@ export const getDnsGraphStats = (text) => {
         }
         privateAndThird[c].add(clientPrivateProviders[c]);
         privateAndThird[c].add(clientThirdProviders[c]);
-        redundantNum++;
       }
       if (
         clientThirdProviders.hasOwnProperty(c) &&
@@ -596,9 +593,9 @@ export const getDnsGraphStats = (text) => {
     graph,
     allNodes,
     allKnownClients.size,
-    thirdOnlyNum,
+    thirdNum,
     criticalNum,
-    redundantNum,
+    thirdOnlyNum,
     privateAndThirdNum,
     privateAndThird,
   ];

@@ -113,9 +113,9 @@ const CountryDashboard = (props) => {
   const [allNodes, setAllNodes] = useState([]);
   const [serviceNodes, setServiceNodes] = useState([]);
   const [allClientNum, setAllClientNum] = useState(0);
+  const [thirdNum, setThirdNum] = useState(0);
   const [thirdOnlyNum, setThirdOnlyNum] = useState(0);
   const [criticalNum, setCriticalNum] = useState(0);
-  const [redundantNum, setredundantNum] = useState(0);
   const [privateAndThirdNum, setPrivateAndThirdNum] = useState(0);
   const [privateAndThird, setPrivateAndThird] = useState(0);
   const [initialResult, setInitialResult] = useState([]);
@@ -159,36 +159,34 @@ const CountryDashboard = (props) => {
     if(cache.hasOwnProperty(data_name)) {
       console.log("found in cache")
       const response = cache[data_name]
-      const [graph, allNodes, clientNum, thirdNum, criticalNum, redundantNum, privateAndThirdNum,privateAndThird] = getGraphStats(response.data, service);
-      // const table_rows = createTable(response.data)
-        // setTable(table_rows);
-      
-      setGraph(graph);
-      setAllNodes(allNodes);
-      setAllClientNum(clientNum);
-      setThirdOnlyNum(thirdNum);
-      setCriticalNum(criticalNum);
-      setredundantNum(redundantNum);
-      setPrivateAndThirdNum(privateAndThirdNum);
-      setPrivateAndThird(privateAndThird);
-      setInitialResult(getTop5Providers(allNodes));
-      setSearchResult(getTop5Providers(allNodes));
-      setLoading(false);
-      console.log(thirdOnlyNum, "third", thirdNum);
+      const [graph, allNodes, clientNum, thirdNum, criticalNum, thirdOnlyNum, privateAndThirdNum,privateAndThird] = getGraphStats(response.data, service);
+        // const table_rows = createTable(response.data)
+          // setTable(table_rows);
+        setGraph(graph);
+        setAllNodes(allNodes);
+        setAllClientNum(clientNum);
+        setThirdOnlyNum(thirdNum);
+        setThirdOnlyNum(thirdOnlyNum)
+        setCriticalNum(criticalNum);
+        setPrivateAndThirdNum(privateAndThirdNum);
+        setPrivateAndThird(privateAndThird);
+        setInitialResult(getTop5Providers(allNodes));
+        setSearchResult(getTop5Providers(allNodes));
+        setLoading(false);
       // getServiceStats(country,service,month)
     } else {
       fetch(`${process.env.REACT_APP_API_ADDRESS}:5000/country/${country}/service/${service}/month/${month}`)
       .then((r) => r.json())
       .then((response) => {
-        const [graph, allNodes, clientNum, thirdNum, criticalNum, redundantNum, privateAndThirdNum,privateAndThird] = getGraphStats(response.data, service);
+        const [graph, allNodes, clientNum, thirdNum, criticalNum, thirdOnlyNum, privateAndThirdNum,privateAndThird] = getGraphStats(response.data, service);
         // const table_rows = createTable(response.data)
           // setTable(table_rows);
         setGraph(graph);
         setAllNodes(allNodes);
-        setAllClientNum(clientNum)
-        setThirdOnlyNum(thirdNum)
+        setAllClientNum(clientNum);
+        setThirdNum(thirdNum);
+        setThirdOnlyNum(thirdOnlyNum)
         setCriticalNum(criticalNum);
-        setredundantNum(redundantNum);
         setPrivateAndThirdNum(privateAndThirdNum);
         setPrivateAndThird(privateAndThird);
         setInitialResult(getTop5Providers(allNodes));
