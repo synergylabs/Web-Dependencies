@@ -1,6 +1,6 @@
 
 mydate=$(date +'%Y')
-LAST_2MONTH=`date -d "$(date +%Y-%m-2) -1 month" +%m`
+LAST_2MONTH=`date -d "$(date +%Y-%m-1) -2 month" +%m`
 
 echo "current year $mydate, and second last month ${LAST_2MONTH}"
 # echo "installing cron"
