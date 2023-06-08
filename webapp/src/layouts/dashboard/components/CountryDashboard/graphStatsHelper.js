@@ -538,8 +538,11 @@ export const getDnsGraphStats = (text) => {
         privateAndThird[c].add(clientThirdProviders[c]);
         redundantNum++;
       }
-      if (clientThirdProviders.hasOwnProperty(c) && clientThirdProviders[c].size > 1 && 
-          !clientPrivateProviders.hasOwnProperty(c)) {
+      if (
+        clientThirdProviders.hasOwnProperty(c) &&
+        clientThirdProviders[c].size > 1 && 
+        !clientPrivateProviders.hasOwnProperty(c)
+        ) {
           thirdOnlyNum++;
       }
 
