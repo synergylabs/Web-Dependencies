@@ -149,7 +149,7 @@ export const getCaGraphStats = (text) => {
     allKnownClients.size,
     thirdNum,
     criticalNum,
-    thirdOnlyNum,
+    staplingNum,
     privateAndThirdNum,
   ];
 };
