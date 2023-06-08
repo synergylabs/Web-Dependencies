@@ -42,58 +42,56 @@ export const getCaGraphStats = (text) => {
     if (!providerClients.hasOwnProperty(provider)) {
       providerClients[provider] = new Set();
     }
-    if (!providerClients[provider].has(client[1])) {
-      providerClients[provider].add(client[1]);
+    providerClients[provider].add(client[1]);
 
-      if (clientIndices.hasOwnProperty(client[1])) {
-        const clientIndex = clientIndices[client[1]];
-        nodes[clientIndex][providerType].add(provider);
-      } else {
-        clientIndices[client[1]] = index;
-        nodes.push({
-          id: index,
-          rank: rank,
-          label: client[1],
-          nodeType: "Client",
-          val: 1,
-          Pvt: new Set(),
-          Third: new Set(),
-          unknown: new Set(),
-          stapling: stapling,
-        });
-        nodes[index][providerType].add(provider);
-        index += 1;
-      }
+    if (clientIndices.hasOwnProperty(client[1])) {
+      const clientIndex = clientIndices[client[1]];
+      nodes[clientIndex][providerType].add(provider);
+    } else {
+      clientIndices[client[1]] = index;
+      nodes.push({
+        id: index,
+        rank: rank,
+        label: client[1],
+        nodeType: "Client",
+        val: 1,
+        Pvt: new Set(),
+        Third: new Set(),
+        unknown: new Set(),
+        stapling: stapling,
+      });
+      nodes[index][providerType].add(provider);
+      index += 1;
+    }
 
-      if (providerIndices.hasOwnProperty(provider)) {
-        const providerIndex = providerIndices[provider];
-        nodes[providerIndex]["conc"].add(client[1]);
-        if (stapling == "False") {
-          nodes[providerIndex]["impact"].add(client[1]);
-        }
-      } else {
-        providerIndices[provider] = index;
-        nodes.push({
-          id: index,
-          label: provider, //in nsProvider ? nsProvider[provider] : provider,
-          nodeType: "Provider",
-          conc: new Set(),
-          impact: new Set(),
-          type: providerType,
-        });
-        nodes[index]["conc"].add(client[1]);
-        if (stapling == "False") {
-          nodes[index]["impact"].add(client[1]);
-        }
-        index += 1;
+    if (providerIndices.hasOwnProperty(provider)) {
+      const providerIndex = providerIndices[provider];
+      nodes[providerIndex]["conc"].add(client[1]);
+      if (stapling == "False") {
+        nodes[providerIndex]["impact"].add(client[1]);
       }
+    } else {
+      providerIndices[provider] = index;
+      nodes.push({
+        id: index,
+        label: provider, //in nsProvider ? nsProvider[provider] : provider,
+        nodeType: "Provider",
+        conc: new Set(),
+        impact: new Set(),
+        type: providerType,
+      });
+      nodes[index]["conc"].add(client[1]);
+      if (stapling == "False") {
+        nodes[index]["impact"].add(client[1]);
+      }
+      index += 1;
     }
   });
 
   // Client centric stats
+  let thirdNum = 0;
   let thirdOnlyNum = 0;
   let criticalNum = 0;
-  let redundantNum = 0;
   let privateAndThirdNum = 0;
 
   allKnownClients.forEach((c) => {

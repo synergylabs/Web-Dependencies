@@ -324,15 +324,13 @@ const CountryDashboard = (props) => {
               </Card>
             </MDBox>
           </Grid>
-          <Grid item xs={12} md={6} lg={3}>
+          {service != "ocsp" && <Grid item xs={12} md={6} lg={3}>
             <MDBox mb={1.5}>
               <Card style={{ backgroundColor: "#0b5394" }}>
                 <CardActionArea onClick={()=>setOpen(!open)}>
                   <CardContent>
                     <MDTypography color="white">
-                    {service == "dns" && "Private and Third-party"}
-                    {service == "cdn" && "Private and Third-party"}
-                    {service == "ocsp" && "HTTPS Support"}
+                    Private and Third-party
                     </MDTypography>
                     <MDTypography pr={5} display="inline" variant="h2" color="white">
                       {privateAndThirdNum}
@@ -351,7 +349,7 @@ const CountryDashboard = (props) => {
                 </CardActionArea>
               </Card>
             </MDBox>
-          </Grid>
+          </Grid>}
         </Grid>
       </MDBox>}
       {/* <Footer /> */}
