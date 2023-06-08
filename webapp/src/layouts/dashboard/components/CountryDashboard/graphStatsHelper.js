@@ -324,7 +324,7 @@ export const getCdnGraphStats = (text) => {
     if (!providerClients.hasOwnProperty(provider)) {
       providerClients[provider] = new Set();
     }
-      providerClients[provider].add(client[1]);
+    providerClients[provider].add(client[1]);
 
     if (clientIndices.hasOwnProperty(client[1])) {
       const clientIndex = clientIndices[client[1]];
