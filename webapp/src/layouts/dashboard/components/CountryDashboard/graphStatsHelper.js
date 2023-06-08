@@ -540,15 +540,18 @@ export const getDnsGraphStats = (text) => {
       }
       if (
         clientThirdProviders.hasOwnProperty(c) &&
-        clientThirdProviders[c].size > 1 && 
+        clientThirdProviders[c].size > 1 &&
         !clientPrivateProviders.hasOwnProperty(c)
       ) {
         thirdOnlyNum++;
       }
 
-      if (clientThirdProviders.hasOwnProperty(c) && clientThirdProviders[c].size == 1 && 
-          !clientPrivateProviders.hasOwnProperty(c)) {
-          criticalNum++;
+      if (
+        clientThirdProviders.hasOwnProperty(c) &&
+        clientThirdProviders[c].size == 1 &&
+        !clientPrivateProviders.hasOwnProperty(c)
+      ) {
+        criticalNum++;
       }
     }
   });
