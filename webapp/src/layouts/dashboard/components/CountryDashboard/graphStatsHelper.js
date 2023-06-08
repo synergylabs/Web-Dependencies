@@ -8,6 +8,7 @@ export const getCaGraphStats = (text) => {
   const clientThirdProviders = {};
   const clientPrivateProviders = new Set();
   const clientUnknownProviders = new Set();
+  const staplingEnabledClients = new Set();
   const clientIndices = {};
   const providerIndices = {};
   const allData = text.split(/\r?\n/).filter((d) => d);
@@ -34,6 +35,9 @@ export const getCaGraphStats = (text) => {
       }
 
       clientThirdProviders[client[1]].add(provider);
+    }
+    if(stapling == "True") {
+      staplingEnabledClients.add(client[1])
     }
     if (!providerClients.hasOwnProperty(provider)) {
       providerClients[provider] = new Set();
@@ -95,17 +99,14 @@ export const getCaGraphStats = (text) => {
   allKnownClients.forEach((c) => {
     if (!clientUnknownProviders.has(c)) {
       if (clientThirdProviders.hasOwnProperty(c)) {
-        if (clientThirdProviders[c].size > 1) {
+        if (staplingEnabledClients.has(c)) {
           redundantNum++;
         }
       }
-      if (clientPrivateProviders.has(c) && clientThirdProviders.hasOwnProperty(c)) {
-        privateAndThirdNum++;
-        redundantNum++;
-      } else if (clientThirdProviders.hasOwnProperty(c)) {
+      if (clientThirdProviders.hasOwnProperty(c)) {
         thirdOnlyNum++;
 
-        if (clientThirdProviders[c].size == 1) {
+        if (!staplingEnabledClients.has(c)) {
           criticalNum++;
         }
       }
