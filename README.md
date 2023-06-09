@@ -1,5 +1,5 @@
 # Development Document
-The web application can be accessed at http://webdependency.andrew.cmu.edu:8080/
+The web application can be accessed at https://webdependency.andrew.cmu.edu
 
 The repo consists of the following components
   - [1. Measurments Modeule](#1-measurements-scripts)
@@ -7,7 +7,8 @@ The repo consists of the following components
   - [3. API Server](#3-box-file-server)
   
 ## 1. Measurement Modules
-The scripts in this folder are basic setup scripts for the measurement module. The measurement module measure the third-party DNS, CDN and CA dependencies of top-10K websites given a country. The code of this measurement module is available at 
+The scripts in this folder are basic setup scripts for the measurement module. The measurement module measure the third-party DNS, CDN and CA dependencies of top-10K websites given a country. The code of this measurement module is available at https://github.com/AqsaKashaf/Webdep.git
+
 The general measurement workflow is the following:
 1. Fetch a list of popular website from Google BigQuery given a country c as input
     1. Please follow https://cloud.google.com/bigquery/docs/reference/libraries to setup Google BigQuery client authentication
@@ -17,18 +18,18 @@ The general measurement workflow is the following:
 1. Classify: Based on the measurement results, classify if the service dependency is Private, Third-party, or unknown
 1. Measure redundancy: For DNS and CDN, measure if a website is using multiple providers, for CA measure OCSP stapling.
 
+The setup script `install-dep.sh` installs dependencies required by the measurement module repo. The setup-cron.sh script schedules the measurements and then uploads the results to a global storage, which in our case is Box (see details below).
 
-Note: The workflow is only set up with DNS for now
 
 Request access to the following if you don't have permissions:
 - Box folder is available here: https://cmu.app.box.com/folder/182556826473
 - The application to upload/download file is https://cmu.app.box.com/developers/console/app/1897359
 
 To run the measurement:
-1. Go to measurements directory `cd measurements`
-1. Install dependencies: `pipenv install`
+1. Clone `https://github.com/AqsaKashaf/Webdep.git`
+1. Install dependencies: `install-dep.sh` and `pipenv install`
 1. Start Python virtual environment: `pipenv shell`
-1. Run scripts: `python main.py <country_code>`
+1. Run scripts: `python Webdep\<service folder>\get_<service>_details_all.py <country_code>`
     1. `country_code` is the two character code for the country, e.g. the country code for the United States is `us`
 
 
