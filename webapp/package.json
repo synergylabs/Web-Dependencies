@@ -49,7 +49,7 @@
     "yup": "0.32.11"
   },
   "scripts": {
-    "start": "PORT=8080 react-scripts --openssl-legacy-provider start",
+    "start": "PORT=8080 react-scripts start",
     "build": "react-scripts build",
     "build-synergy": "PUBLIC_URL=/aqsa react-scripts build",
     "test": "react-scripts test",
