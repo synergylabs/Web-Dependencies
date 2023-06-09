@@ -32,11 +32,12 @@ To run the measurement:
 1. Run scripts: `python Webdep\<service folder>\get_<service>_details_all.py <country_code>` This script gets the second last month's google CrUX list for "<country_code>" and measures their dependency. The output file name is: `<country_code>-<service>-<YYYYMM>`. Each line is formatted as follows: `<rank>,<domain_name>,<provider>,<provider_type>`
     1. `country_code` is the two character code for the country, e.g. the country code for the United States is `us`
     1. `service` is DNS, CDN or CA.
+1. If you want to measure only for a single website, then run `python Webdep\<service folder>\get_<service>_details_unit.py`
 
 
 
 ## 2. Web Application
-The web application is a React frontend application. The web application may load files in this repo or call the [Box File Server](#3-box-file-server) to fetch files from CMU Box. The application uses [Material UI](https://mui.com/material-ui/getting-started/overview/) with some [Material Dashboard Components](https://www.creative-tim.com/learning-lab/react/routing-system/material-dashboard/).
+The web application is a React frontend application. The web application may load files in this repo or call the [API Server](#3-box-file-server) to fetch files from CMU Box. The application uses [Material UI](https://mui.com/material-ui/getting-started/overview/) with some [Material Dashboard Components](https://www.creative-tim.com/learning-lab/react/routing-system/material-dashboard/).
 
 - The source files for the home page is in `src/layouts/home/`. 
 - The source files for region analysis, country analysis are in `src/layouts/dashboard`. 
@@ -47,6 +48,9 @@ To run the application:
 1. Install dependencies: `npm install`
 1. Run application: `npm start`
 1. The application should be available at http://localhost:8080/
+1. To change the test port, see package.json
+1. To build: `npm build`, build settings can also be changed in package.json
+
 
 ## 3. Box File Server
 The Box file server is a backend service written in Python [Flask](https://flask.palletsprojects.com/en/2.2.x/). It is used to fetch files from CMU Box. Currently the route `/country/<country>/service/<service>/month/<month>` is in use. It first look for requested file from directory `files`, and fetch from Box if the file doesn't exist locally. The file server is deployed at http://webdependency.andrew.cmu.edu:5000/
