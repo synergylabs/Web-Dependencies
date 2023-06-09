@@ -47,7 +47,6 @@ class BoxClient:
             for file in folder.iterdir():
                 if(service in file.stem):
                     files.append(folder.stem)
-        print(files)
         return ";".join(files)
     
     def get_file_lists(self, country, service, month):
