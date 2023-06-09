@@ -77,7 +77,6 @@ const getGraphStats = (text, service) => {
 }
 
 function getPercentage(value, total) {
-  console.log(value, total)
   return Math.round(100*value/total);
 }
 
@@ -121,8 +120,7 @@ const CountryDashboard = (props) => {
   const [searchResult, setSearchResult] = useState(initialResult);
   const [searchHeading, setSearchHeading] = useState("Providers");
   const [open, setOpen] = useState(false);
-  const [fileList, setFileList] = useState(["202210"]);
-  const [fileListUpdated, setFileListUpdated] = useState(false);
+  const [fileList, setFileList] = useState({"dns": [], "cdn": [],"ocsp":[]});
 
   function getWebsites(privateAndThird) {
     return Object.keys(privateAndThird).map((key, index) => ( 
@@ -151,8 +149,7 @@ const CountryDashboard = (props) => {
     .then((r) => r.json())
     .then((response) => {
       let files = response.data.split(";")
-      console.log(files)
-      setFileList(files)
+      setFileList(fileList => ({...fileList, service: files}))
     })
     return val
   }
@@ -226,7 +223,7 @@ const CountryDashboard = (props) => {
     console.log("service change fucntion", curService)
     get_file_list(country, curService, snapshot).then(() => {
       console.log("service change fucntion", fileList)
-      setSnapshot(fileList.at(-1))
+      setSnapshot(fileList[curService].at(-1))
       console.log("service change fucntion", snapshot)
       setService(curService);
       console.log("service change fucntion", service)
@@ -254,7 +251,7 @@ const CountryDashboard = (props) => {
       mysnapshot = `${year}${month}`
     }
     get_file_list(country, service, mysnapshot).then( () => {
-      const latest_snapshot = fileList.at(-1)
+      const latest_snapshot = fileList[service].at(-1)
       console.log(mysnapshot, latest_snapshot, fileList)
       setSnapshot(latest_snapshot)
       getData(country, service, latest_snapshot)
