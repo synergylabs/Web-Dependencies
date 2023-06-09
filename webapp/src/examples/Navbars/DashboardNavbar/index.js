@@ -69,6 +69,12 @@ function get_menu_items(files) {
     )
   })
 }
+
+function format_snapshot(snapshot) {
+  let year = snapshot.slice(0,4);
+  let month = snapshot.slice(4,6);
+  return `${year}-${month}`;
+}
 function DashboardNavbar({ absolute, light, isMini, title, service, onServiceChange, showService, snapshot, onSnapshotChange, fileList, showSnapshot }) {
   const [navbarType, setNavbarType] = useState();
   const [controller, dispatch] = useMaterialUIController();
@@ -181,7 +187,7 @@ function DashboardNavbar({ absolute, light, isMini, title, service, onServiceCha
                   {/* <MenuItem value={"202210"}>10-2022</MenuItem> */}
                   {/* <MenuItem value={"202304"}>202304</MenuItem> */}
                   {fileList.map((option) => (
-                    <MenuItem key={option} value={option}>
+                    <MenuItem key={option} value={format_snapshot(option)}>
                     {option}
                     </MenuItem>
                   ))}
