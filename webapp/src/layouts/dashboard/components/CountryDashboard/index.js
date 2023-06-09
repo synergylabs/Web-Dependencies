@@ -220,12 +220,12 @@ const CountryDashboard = (props) => {
   
   const onServiceChange = (e) => {
     const curService = e.target.value;
-    const month = snapshot;
-    setService(curService);
-    setLoading(true);
-    getData(country, curService, month)
     get_file_list(country, curService, month)
     setSnapshot(fileList.at(-1))
+    setService(curService);
+    setLoading(true);
+    getData(country, curService, snapshot)
+    
   }
   const onSnapshotChange = (e) => {
     const curSnapshot = e.target.value;
