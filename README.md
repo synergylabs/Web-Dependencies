@@ -29,7 +29,7 @@ To run the measurement:
 1. Clone `https://github.com/AqsaKashaf/Webdep.git`
 1. Install dependencies: `install-dep.sh` and `pipenv install`
 1. Start Python virtual environment: `pipenv shell`
-1. Run scripts: `python Webdep\<service folder>\get_<service>_details_all.py <country_code>`
+1. Run scripts: `python Webdep\<service folder>\get_<service>_details_all.py <country_code>` This script gets the second last month's google CrUX list for "<country_code>" and measures their dependency. The output file name is: `<country_code>-<service>-<YYYYMM>`. Each line is formatted as follows: `<rank>,<domain_name>,<provider>,<provider_type>`
     1. `country_code` is the two character code for the country, e.g. the country code for the United States is `us`
     1. `service` is DNS, CDN or CA.
 
