@@ -154,6 +154,7 @@ const CountryDashboard = (props) => {
       console.log(files)
       setFileList(files)
     })
+    return val
   }
   function getData(country, service, month) {
     const data_name = `${country}-${service}-${month}`
