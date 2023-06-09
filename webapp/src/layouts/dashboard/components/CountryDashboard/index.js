@@ -162,7 +162,7 @@ const CountryDashboard = (props) => {
     .then(() => {
       console.log("getting data", service, country, snapshot)
       getData(country, service, snapshot)
-      setLoading(true);
+      // setLoading(true);
     })
   }
   function getData(country, service, month) {
