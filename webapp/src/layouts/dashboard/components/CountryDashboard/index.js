@@ -225,6 +225,7 @@ const CountryDashboard = (props) => {
     setLoading(true);
     getData(country, curService, month)
     get_file_list(country, curService, month)
+    setSnapshot(fileList.at(-1))
   }
   const onSnapshotChange = (e) => {
     const curSnapshot = e.target.value;
@@ -246,12 +247,11 @@ const CountryDashboard = (props) => {
       mysnapshot = `${year}${month}`
     }
     
-    get_file_list(country, service,mysnapshot)
+    get_file_list(country, service, mysnapshot)
     const latest_snapshot = fileList.at(-1)
     console.log(mysnapshot, latest_snapshot, fileList)
     setSnapshot(latest_snapshot)
     getData(country, service, latest_snapshot)
-   
   }
 
   return (

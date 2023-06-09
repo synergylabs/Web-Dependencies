@@ -1,0 +1,35 @@
+{
+  "files": {
+    "main.js": "./static/js/main.042978a3.js",
+    "static/media/cdn-dependency.png": "./static/media/cdn-dependency.9f239e7ce90eade8f4c8.png",
+    "static/media/dns-dependency.png": "./static/media/dns-dependency.00a7eeaaf26cb00d1541.png",
+    "static/media/ocsp-dependency.png": "./static/media/ocsp-dependency.5bf70a6b113a6b571f71.png",
+    "static/media/us-dns.png": "./static/media/us-dns.e6026f06d068afacd013.png",
+    "static/media/https-usage.png": "./static/media/https-usage.5061bcebff5ee9434274.png",
+    "static/media/yagarwal.jpeg": "./static/media/yagarwal.d0f24f96c4407d9161fd.jpeg",
+    "static/media/dns-cdf.png": "./static/media/dns-cdf.1830753766a69710bb59.png",
+    "static/media/dns-critical-rank.png": "./static/media/dns-critical-rank.c5d89964c0c1ccbdcf71.png",
+    "static/media/cdn-cdf.png": "./static/media/cdn-cdf.5a276646e5c47552685d.png",
+    "static/media/cdn-critical-vantage.png": "./static/media/cdn-critical-vantage.de9e270615eac2e5d91d.png",
+    "static/media/ca-cdf.png": "./static/media/ca-cdf.7795d7fc7b0e10bad60d.png",
+    "static/media/ocsp-critical-vantage.png": "./static/media/ocsp-critical-vantage.e5500338002c0cd50126.png",
+    "static/media/dns-critical-vantage.png": "./static/media/dns-critical-vantage.295a6647e55ebac86117.png",
+    "static/media/akashaf.jpeg": "./static/media/akashaf.1a092e973c3f77278f48.jpeg",
+    "static/media/cdn-critical-rank.png": "./static/media/cdn-critical-rank.026f2edf9dea14b10ebc.png",
+    "static/media/ocsp-critical-rank.png": "./static/media/ocsp-critical-rank.67f421b6ec86faf8b417.png",
+    "static/media/cdn-usage.png": "./static/media/cdn-usage.fec486f7eb9806eb7b8a.png",
+    "static/media/dns-redundant-rank.png": "./static/media/dns-redundant-rank.915d3bf5abd3832b6fb3.png",
+    "static/media/mapostolaki.jpeg": "./static/media/mapostolaki.004a9543db1c47cddc69.jpeg",
+    "static/media/rw-venn.png": "./static/media/rw-venn.cf778ce25708d4d8a1aa.png",
+    "static/media/za-venn.png": "./static/media/za-venn.9ba17121a14f11c1b2a1.png",
+    "static/media/ke-venn.png": "./static/media/ke-venn.bd297638c1c1df505f9d.png",
+    "static/media/ng-venn.png": "./static/media/ng-venn.e7f838aa87c3deb1746e.png",
+    "static/media/vsekar.jpeg": "./static/media/vsekar.ba54510ea196944be456.jpeg",
+    "static/media/cdn_dns": "./static/media/cdn_dns.0d0e57dfcf33159629db",
+    "index.html": "./index.html",
+    "main.042978a3.js.map": "./static/js/main.042978a3.js.map"
+  },
+  "entrypoints": [
+    "static/js/main.042978a3.js"
+  ]
+}
