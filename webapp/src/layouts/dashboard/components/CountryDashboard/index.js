@@ -77,6 +77,7 @@ const getGraphStats = (text, service) => {
 }
 
 function getPercentage(value, total) {
+  console.log(value, total)
   return Math.round(100*value/total);
 }
 
@@ -120,7 +121,7 @@ const CountryDashboard = (props) => {
   const [searchResult, setSearchResult] = useState(initialResult);
   const [searchHeading, setSearchHeading] = useState("Providers");
   const [open, setOpen] = useState(false);
-  const [fileList, setFileList] = useState({"dns": [], "cdn": [],"ocsp":[]});
+  const [fileList, setFileList] = useState(["202210"]);
 
   function getWebsites(privateAndThird) {
     return Object.keys(privateAndThird).map((key, index) => ( 
@@ -144,14 +145,13 @@ const CountryDashboard = (props) => {
       });
   }
 
-  async function get_file_list(country, service,month) {
-    const val =  await fetch(`${process.env.REACT_APP_API_ADDRESS}:5000/country/${country}/service/${service}/month/${month}/list`)
+  function get_file_list(country, service,month) {
+    fetch(`${process.env.REACT_APP_API_ADDRESS}:5000/country/${country}/service/${service}/month/${month}/list`)
     .then((r) => r.json())
     .then((response) => {
       let files = response.data.split(";")
-      setFileList(fileList => ({...fileList, service: files}))
-    })
-    return val
+      setFileList(files)
+    });
   }
   function getData(country, service, month) {
     const data_name = `${country}-${service}-${month}`
@@ -220,16 +220,13 @@ const CountryDashboard = (props) => {
   
   const onServiceChange = (e) => {
     const curService = e.target.value;
-    console.log("service change fucntion", curService)
-    get_file_list(country, curService, snapshot).then(() => {
-      console.log("service change fucntion", fileList)
-      setSnapshot(fileList[curService].at(-1))
-      console.log("service change fucntion", snapshot)
-      setService(curService);
-      console.log("service change fucntion", service)
-      setLoading(true);
-      getData(country, service, snapshot)
-    })
+    get_file_list(country, curService, snapshot)
+    setSnapshot(fileList.at(-1))
+    console.log(snapshot, curService)
+    setService(curService);
+    setLoading(true);
+    getData(country, curService, snapshot)
+    
   }
   const onSnapshotChange = (e) => {
     const curSnapshot = e.target.value;
@@ -250,17 +247,17 @@ const CountryDashboard = (props) => {
     } else {
       mysnapshot = `${year}${month}`
     }
-    get_file_list(country, service, mysnapshot).then( () => {
-      const latest_snapshot = fileList[service].at(-1)
-      console.log(mysnapshot, latest_snapshot, fileList)
-      setSnapshot(latest_snapshot)
-      getData(country, service, latest_snapshot)
-    })
+    
+    get_file_list(country, service, mysnapshot)
+    const latest_snapshot = fileList.at(-1)
+    console.log(mysnapshot, latest_snapshot, fileList)
+    setSnapshot(latest_snapshot)
+    getData(country, service, latest_snapshot)
   }
 
   return (
     <DashboardLayout>
-      <DashboardNavbar title={title} service={service} onServiceChange={onServiceChange} showService snapshot={snapshot} onSnapshotChange={onSnapshotChange} fileList={fileList[service]} showSnapshot />
+      <DashboardNavbar title={title} service={service} onServiceChange={onServiceChange} showService snapshot={snapshot} onSnapshotChange={onSnapshotChange} fileList={fileList} showSnapshot />
       {loading ?
       <CircularProgress sx={{ display: 'flex', marginLeft:"48%" }} color="info" size="4rem"/> :
       <MDBox py={3}>

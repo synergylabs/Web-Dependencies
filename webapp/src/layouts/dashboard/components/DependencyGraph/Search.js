@@ -90,12 +90,12 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import Config from "./Config"
 
 function get_percentage(num, total) {
-  // console.log(total);
+  console.log(total);
   return (num / total * 100).toFixed(2)
 }
 function Search(props) {
   const { searchTerm, searchResult, onSearchInputChange, heading, service, servicedep, totalClients } = props;
-  // console.log( totalClients)
+  console.log( totalClients)
   const searchResultList = searchResult.map((node) => {
     const isProvider = node.nodeType === "Provider";
     const color = isProvider ? Config.ProviderColor : Config.ClientColor;
