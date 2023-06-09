@@ -152,6 +152,9 @@ const CountryDashboard = (props) => {
       let files = response.data.split(";")
       console.log(files)
       setFileList(files)
+      setSnapshot(fileList.at(-1))
+      setLoading(true);
+      getData(country, curService, snapshot)
     });
   }
   function getData(country, service, month) {
@@ -222,13 +225,7 @@ const CountryDashboard = (props) => {
   const onServiceChange = (e) => {
     const curService = e.target.value;
     get_file_list(country, curService, snapshot)
-    console.log(fileList)
-    setSnapshot(fileList.at(-1))
-    console.log(snapshot, curService)
     setService(curService);
-    setLoading(true);
-    getData(country, curService, snapshot)
-    
   }
   const onSnapshotChange = (e) => {
     const curSnapshot = e.target.value;
