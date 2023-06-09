@@ -31,6 +31,7 @@ To run the measurement:
 1. Start Python virtual environment: `pipenv shell`
 1. Run scripts: `python Webdep\<service folder>\get_<service>_details_all.py <country_code>`
     1. `country_code` is the two character code for the country, e.g. the country code for the United States is `us`
+    1.` service` is `DNS`, `CDN` or `CA`.
 
 
 
