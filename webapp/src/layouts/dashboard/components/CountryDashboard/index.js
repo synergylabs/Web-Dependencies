@@ -122,6 +122,7 @@ const CountryDashboard = (props) => {
   const [searchHeading, setSearchHeading] = useState("Providers");
   const [open, setOpen] = useState(false);
   const [fileList, setFileList] = useState(["202210"]);
+  const [fileListUpdated, setFileListUpdated] = useState(false);
 
   function getWebsites(privateAndThird) {
     return Object.keys(privateAndThird).map((key, index) => ( 
@@ -146,16 +147,18 @@ const CountryDashboard = (props) => {
   }
 
   function get_file_list(country, service,month) {
-    fetch(`${process.env.REACT_APP_API_ADDRESS}:5000/country/${country}/service/${service}/month/${month}/list`)
-    .then((r) => r.json())
-    .then((response) => {
-      let files = response.data.split(";")
-      console.log(files)
-      setFileList(files)
-      setSnapshot(fileList.at(-1))
-      setLoading(true);
-      getData(country, curService, snapshot)
-    });
+    return new Promise((resolve,reject) => {
+      setTimeout(()=> {
+        fetch(`${process.env.REACT_APP_API_ADDRESS}:5000/country/${country}/service/${service}/month/${month}/list`)
+        .then((r) => r.json())
+        .then((response) => {
+          let files = response.data.split(";")
+          console.log(files)
+          setFileList(files)
+        });
+      }, 300000);
+    })
+    
   }
   function getData(country, service, month) {
     const data_name = `${country}-${service}-${month}`
@@ -224,8 +227,12 @@ const CountryDashboard = (props) => {
   
   const onServiceChange = (e) => {
     const curService = e.target.value;
-    get_file_list(country, curService, snapshot)
-    setService(curService);
+    get_file_list(country, curService, snapshot).then(() => {
+      setSnapshot(fileList.at(-1))
+      setService(curService);
+      setLoading(true);
+      getData(country, service, snapshot)
+    })
   }
   const onSnapshotChange = (e) => {
     const curSnapshot = e.target.value;
@@ -246,12 +253,12 @@ const CountryDashboard = (props) => {
     } else {
       mysnapshot = `${year}${month}`
     }
-    
-    get_file_list(country, service, mysnapshot)
-    const latest_snapshot = fileList.at(-1)
-    console.log(mysnapshot, latest_snapshot, fileList)
-    setSnapshot(latest_snapshot)
-    getData(country, service, latest_snapshot)
+    get_file_list(country, service, mysnapshot).then( () => {
+      const latest_snapshot = fileList.at(-1)
+      console.log(mysnapshot, latest_snapshot, fileList)
+      setSnapshot(latest_snapshot)
+      getData(country, service, latest_snapshot)
+    })
   }
 
   return (
