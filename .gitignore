@@ -6,3 +6,6 @@
 **/my-notes.md
 **/notes
 **/keys/
+**/__pycache__/
+**/package-lock.json
+**/node_modules

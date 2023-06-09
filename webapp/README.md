@@ -1,70 +1,77 @@
-# Getting Started with Create React App
+# Development Document
+The web application can be accessed at http://webdependency.andrew.cmu.edu:8080/
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+The repo consists of the following components
+  - [1. Measurments Scripts](#1-measurements-scripts)
+  - [2. Web Application](#2-web-application)
+  - [3. Box File Server](#3-box-file-server)
+  
+## 1. Measurements Scripts
+The Python scripts can process measurements for target services (DNS, CDN, and CA). 
 
-## Available Scripts
+The general measurement workflow is the following:
+1. Fetch a list of popular website from Google BigQuery
+    1. Please follow https://cloud.google.com/bigquery/docs/reference/libraries to setup Google BigQuery client authentication
+    1. Once credentials retrieved and stored locally, save the path to the credential file in the variable `export GOOGLE_APPLICATION_CREDENTIALS="<path_to_credentials_json>"` 
+1. Measurement: retrieve service dependencies for all websites in the list returned from step 1
+1. Classify: Based on the measurement results, classify if the service dependency is Private, Third-party, or unknown
+1. Group: Group the dependencies together based on their attributes so they won't be repeated
+1. Print: Print out results, including website/client, service, service type, and group name
+1. Analyze: Process analyze the results to obtain provider stats and client stats
+1. Plot: Generate a json file for dependency graph plotting on the web application
 
-In the project directory, you can run:
+Note: The workflow is only set up with DNS for now
 
-### `npm start`
+Request access to the following if you don't have permissions:
+- Box folder is available here: https://cmu.app.box.com/folder/182556826473
+- The application to upload/download file is https://cmu.app.box.com/developers/console/app/1897359
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+To run the measurement:
+1. Go to measurements directory `cd measurements`
+1. Install dependencies: `pipenv install`
+1. Start Python virtual environment: `pipenv shell`
+1. Run scripts: `python main.py <country_code>`
+    1. `country_code` is the two character code for the country, e.g. the country code for the United States is `us`
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
 
-### `npm test`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## 2. Web Application
+The web application is a React frontend application. The web application may load files in this repo or call the [Box File Server](#3-box-file-server) to fetch files from CMU Box. The application uses [Material UI](https://mui.com/material-ui/getting-started/overview/) with some [Material Dashboard Components](https://www.creative-tim.com/learning-lab/react/routing-system/material-dashboard/).
 
-### `npm run build`
+- The source files for the home page is in `src/layouts/home/`. 
+- The source files for region analysis, country analysis are in `src/layouts/dashboard`. 
+- The source files for side nav bar are in `src/examples/Sidenav`
+The soruce files for top nav bar are in `src/examples/Navbars/DashboardNavbar`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+To run the application:
+1. Install dependencies: `npm install`
+1. Run application: `npm start`
+1. The application should be available at http://localhost:8080/
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## 3. Box File Server
+The Box file server is a backend service written in Python [Flask](https://flask.palletsprojects.com/en/2.2.x/). It is used to fetch files from CMU Box. Currently the route `/country/<country>/service/<service>/month/<month>` is in use. It first look for requested file from directory `files`, and fetch from Box if the file doesn't exist locally. The file server is deployed at http://webdependency.andrew.cmu.edu:5000/
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-### `npm run eject`
+Request access to the following if you don't have permissions:
+- Box folder is available here: https://cmu.app.box.com/folder/182556826473
+- The application to upload/download file is https://cmu.app.box.com/developers/console/app/1897359
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+Before running the server, you will need to fetch the client secret for the application:
+1. Go to https://cmu.app.box.com/developers/console/app/1897359/configuration
+1. Click "Fetch Client Secret" in "OAuth 2.0 Credentials" section
+1. Copy the client secret
+1. Create a new file in your home directory `~/.secrets/credentials.json`
+    1. Format:
+        ```
+        {
+          "box_client": <client_secret>
+        }
+        ```
+    1. If you create the file at another location, change the path for the `credentials_file` in the `init_client` function in `box_client.py`
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+To run the server:
+1. Go to box file server directory: `cd box_file_server`
+1. Installl dependencies in the virtual environment: `pipenv install`
+1. Activate Python virtual environment `pipenv shell`
+1. Run the server: `flask run`
+1. The server should be available at http://localhost:5000
