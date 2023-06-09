@@ -151,11 +151,13 @@ const CountryDashboard = (props) => {
     .then((response) => {
       let files = response.data.split(";")
       setFileList(files)
+      console.log(fileList)
     })
     .then(() => {
       setSnapshot(fileList.at(-1))
       console.log(snapshot, service)
       setService(service);
+      console.log(service, service)
       setLoading(true);
     })
     .then(() => {
