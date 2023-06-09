@@ -6,19 +6,17 @@ The repo consists of the following components
   - [2. Web Application](#2-web-application)
   - [3. API Server](#3-box-file-server)
   
-## 1. Measurements Scripts
-The Python scripts can process measurements for target services (DNS, CDN, and CA). 
-
+## 1. Measurement Modules
+The scripts in this folder are basic setup scripts for the measurement module. The measurement module measure the third-party DNS, CDN and CA dependencies of top-10K websites given a country. The code of this measurement module is available at 
 The general measurement workflow is the following:
-1. Fetch a list of popular website from Google BigQuery
+1. Fetch a list of popular website from Google BigQuery given a country c as input
     1. Please follow https://cloud.google.com/bigquery/docs/reference/libraries to setup Google BigQuery client authentication
+    1. We are using a custom gmail account for this project webdep.cmu@gmail.com. Please contact Yuvraj, Vyas or me for its credentials.
     1. Once credentials retrieved and stored locally, save the path to the credential file in the variable `export GOOGLE_APPLICATION_CREDENTIALS="<path_to_credentials_json>"` 
 1. Measurement: retrieve service dependencies for all websites in the list returned from step 1
 1. Classify: Based on the measurement results, classify if the service dependency is Private, Third-party, or unknown
-1. Group: Group the dependencies together based on their attributes so they won't be repeated
-1. Print: Print out results, including website/client, service, service type, and group name
-1. Analyze: Process analyze the results to obtain provider stats and client stats
-1. Plot: Generate a json file for dependency graph plotting on the web application
+1. Measure redundancy: For DNS and CDN, measure if a website is using multiple providers, for CA measure OCSP stapling.
+
 
 Note: The workflow is only set up with DNS for now
 
