@@ -124,9 +124,9 @@ export const getCaGraphStats = (text) => {
       nodeToGraph.push(allNodes[providerIndex]);
     }
     curClients.forEach((c) => {
-      // if (clientThirdProviders.hasOwnProperty(c) && clientThirdProviders[c].size == 1) {
-      //   allNodes[providerIndex]["impact"].add(c);
-      // }
+      if (clientThirdProviders.hasOwnProperty(c) && clientThirdProviders[c].size == 1) {
+        allNodes[providerIndex]["impact"].add(c);
+      }
       if (topProviders.has(providerIndex)) {
         const clientIndex = clientIndices[c];
         nodeToGraph.push(allNodes[clientIndex]);
