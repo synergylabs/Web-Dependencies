@@ -153,17 +153,17 @@ const CountryDashboard = (props) => {
       setFileList(files)
       console.log(fileList)
     })
-    .then(() => {
-      setSnapshot(fileList.at(-1))
-      console.log(snapshot, service)
-      setService(service);
-      console.log(service, service)
-    })
-    .then(() => {
-      console.log("getting data", service, country, snapshot)
-      getData(country, service, snapshot)
+    // .then(() => {
+    //   setSnapshot(fileList.at(-1))
+    //   console.log(snapshot, service)
+    //   setService(service);
+    //   console.log(service, service)
+    // })
+    // .then(() => {
+    //   console.log("getting data", service, country, snapshot)
+    //   getData(country, service, snapshot)
       // setLoading(true);
-    })
+    // })
   }
   function getData(country, service, month) {
     const data_name = `${country}-${service}-${month}`
@@ -260,11 +260,11 @@ const CountryDashboard = (props) => {
       mysnapshot = `${year}${month}`
     }
     
-    // get_file_list(country, service, mysnapshot)
+    get_file_list(country, service, mysnapshot)
     // const latest_snapshot = fileList.at(-1)
     // console.log(mysnapshot, latest_snapshot, fileList)
     // setSnapshot(latest_snapshot)
-    getData(country, service, snapshot)
+    getData(country, service, "202010")
   }
 
   return (
