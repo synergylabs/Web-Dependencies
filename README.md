@@ -79,3 +79,4 @@ To run the server:
 1. Activate Python virtual environment `pipenv shell`
 1. Run the server: `flask run`
 1. The server should be available at http://localhost:5000
+1. To make it public use: flask run --host=0.0.0.0
