@@ -151,7 +151,16 @@ const CountryDashboard = (props) => {
     .then((response) => {
       let files = response.data.split(";")
       setFileList(files)
-    });
+    })
+    .then(() => {
+      setSnapshot(fileList.at(-1))
+      console.log(snapshot, service)
+      setService(service);
+      setLoading(true);
+    })
+    .then(() => {
+      getData(country, service, snapshot)
+    })
   }
   function getData(country, service, month) {
     const data_name = `${country}-${service}-${month}`
@@ -221,11 +230,11 @@ const CountryDashboard = (props) => {
   const onServiceChange = (e) => {
     const curService = e.target.value;
     get_file_list(country, curService, snapshot)
-    setSnapshot(fileList.at(-1))
-    console.log(snapshot, curService)
-    setService(curService);
-    setLoading(true);
-    getData(country, curService, snapshot)
+    // setSnapshot(fileList.at(-1))
+    // console.log(snapshot, curService)
+    // setService(curService);
+    // setLoading(true);
+    // getData(country, curService, snapshot)
     
   }
   const onSnapshotChange = (e) => {
@@ -237,7 +246,7 @@ const CountryDashboard = (props) => {
 
   if (country && country !== curCountry ) {
     setcurCountry(country);
-    setLoading(true);
+    // setLoading(true);
     let newDate = new Date()
     let month = newDate.getMonth() - 1;
     let year = newDate.getFullYear();
@@ -249,10 +258,10 @@ const CountryDashboard = (props) => {
     }
     
     get_file_list(country, service, mysnapshot)
-    const latest_snapshot = fileList.at(-1)
-    console.log(mysnapshot, latest_snapshot, fileList)
-    setSnapshot(latest_snapshot)
-    getData(country, service, latest_snapshot)
+    // const latest_snapshot = fileList.at(-1)
+    // console.log(mysnapshot, latest_snapshot, fileList)
+    // setSnapshot(latest_snapshot)
+    // getData(country, service, latest_snapshot)
   }
 
   return (
