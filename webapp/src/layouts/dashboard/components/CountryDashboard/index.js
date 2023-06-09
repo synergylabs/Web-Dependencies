@@ -47,8 +47,8 @@ import Footer from "examples/Footer";
 // Dashboard components
 import Graph from "layouts/dashboard/components/DependencyGraph/Graph";
 import Search from "layouts/dashboard/components/DependencyGraph/Search";
-import { getDnsGraphStats, getCdnGraphStats, getCaGraphStats } from "../CountryDashboard/graphStatsHelper"
-import {createTable } from "../CountryDashboard/tableHelper"
+import { getDnsGraphStats, getCdnGraphStats, getCaGraphStats } from "./graphStatsHelper"
+import {createTable } from "./tableHelper"
 // import {showGraph } from "../CountryDashboard/graph"
 import raw from "data/cdn_dns";
 

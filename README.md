@@ -2,9 +2,9 @@
 The web application can be accessed at http://webdependency.andrew.cmu.edu:8080/
 
 The repo consists of the following components
-  - [1. Measurments Scripts](#1-measurements-scripts)
+  - [1. Measurments Modeule](#1-measurements-scripts)
   - [2. Web Application](#2-web-application)
-  - [3. Box File Server](#3-box-file-server)
+  - [3. API Server](#3-box-file-server)
   
 ## 1. Measurements Scripts
 The Python scripts can process measurements for target services (DNS, CDN, and CA). 
