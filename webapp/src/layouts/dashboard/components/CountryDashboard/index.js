@@ -260,7 +260,7 @@ const CountryDashboard = (props) => {
 
   return (
     <DashboardLayout>
-      <DashboardNavbar title={title} service={service} onServiceChange={onServiceChange} showService snapshot={snapshot} onSnapshotChange={onSnapshotChange} fileList={fileList} showSnapshot />
+      <DashboardNavbar title={title} service={service} onServiceChange={onServiceChange} showService snapshot={snapshot} onSnapshotChange={onSnapshotChange} fileList={fileList[service]} showSnapshot />
       {loading ?
       <CircularProgress sx={{ display: 'flex', marginLeft:"48%" }} color="info" size="4rem"/> :
       <MDBox py={3}>
