@@ -146,19 +146,14 @@ const CountryDashboard = (props) => {
       });
   }
 
-  function get_file_list(country, service,month) {
-    return new Promise((resolve,reject) => {
-      setTimeout(()=> {
-        fetch(`${process.env.REACT_APP_API_ADDRESS}:5000/country/${country}/service/${service}/month/${month}/list`)
-        .then((r) => r.json())
-        .then((response) => {
-          let files = response.data.split(";")
-          console.log(files)
-          setFileList(files)
-        });
-      }, 300000);
+  async function get_file_list(country, service,month) {
+    const val =  await fetch(`${process.env.REACT_APP_API_ADDRESS}:5000/country/${country}/service/${service}/month/${month}/list`)
+    .then((r) => r.json())
+    .then((response) => {
+      let files = response.data.split(";")
+      console.log(files)
+      setFileList(files)
     })
-    
   }
   function getData(country, service, month) {
     const data_name = `${country}-${service}-${month}`
