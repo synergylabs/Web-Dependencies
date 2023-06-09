@@ -187,8 +187,8 @@ function DashboardNavbar({ absolute, light, isMini, title, service, onServiceCha
                   {/* <MenuItem value={"202210"}>10-2022</MenuItem> */}
                   {/* <MenuItem value={"202304"}>202304</MenuItem> */}
                   {fileList.map((option) => (
-                    <MenuItem key={option} value={format_snapshot(option)}>
-                    {option}
+                    <MenuItem key={option} value={option}>
+                    {format_snapshot(option)}
                     </MenuItem>
                   ))}
                 </Select>
