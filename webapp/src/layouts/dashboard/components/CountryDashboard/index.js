@@ -222,6 +222,7 @@ const CountryDashboard = (props) => {
     const curService = e.target.value;
     get_file_list(country, curService, month)
     setSnapshot(fileList.at(-1))
+    console.log(snapshot, curService)
     setService(curService);
     setLoading(true);
     getData(country, curService, snapshot)
