@@ -249,7 +249,7 @@ const CountryDashboard = (props) => {
 
   if (country && country !== curCountry ) {
     setcurCountry(country);
-    // setLoading(true);
+    setLoading(true);
     let newDate = new Date()
     let month = newDate.getMonth() - 1;
     let year = newDate.getFullYear();
