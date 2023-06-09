@@ -223,9 +223,13 @@ const CountryDashboard = (props) => {
   
   const onServiceChange = (e) => {
     const curService = e.target.value;
+    console.log("service change fucntion", curService)
     get_file_list(country, curService, snapshot).then(() => {
+      console.log("service change fucntion", fileList)
       setSnapshot(fileList.at(-1))
+      console.log("service change fucntion", snapshot)
       setService(curService);
+      console.log("service change fucntion", service)
       setLoading(true);
       getData(country, service, snapshot)
     })
