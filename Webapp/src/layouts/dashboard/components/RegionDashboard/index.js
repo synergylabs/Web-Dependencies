@@ -39,7 +39,7 @@ const RegionDashboard = (props) => {
           <Card>
             <MDBox pt={3} px={2}>
               <MDTypography variant="h3" fontWeight="medium">
-                Critical Dependency and Redundancy
+                Critical Dependency and Redundancy - Africa vs. US
               </MDTypography>
               <Typography variant="body2" color="text.secondary">
               The figures show the portion of US-visited , ZA-visited , NG-visited , RW-visited and KE-visited websites with different popularity (top 1K and 10K) that are critically dependent or redundantly provisioned as a function of the particular service and as measured by vantage
@@ -49,10 +49,10 @@ points that are in the corresponding region.
             <MDBox pt={1} pb={2} px={2}>
               <MDBox component="ul" display="flex" flexDirection="column" p={0} m={0}>
                 <Grid container spacing={3}>
-                  <GridItemCard xs={12} md={6} lg={6} imageName="africa/dns-critical-rank.png" contentHeader="DNS Critical Dependency" contentBody="Critical DNS dependency for top 10K US-visited sites when measured from a US vantage point is 5% to 7% less than the top 10K Africa-visited websites. This gap incritical dependency increases to 6% to 10% in the more popular (top 1K) websites." sourceName="dns-critical-rank"/>
-                  <GridItemCard xs={12} md={6} lg={6} imageName="africa/dns-redundant-rank.png" contentHeader="DNS Redundancy" contentBody="The percentage of websites that are redundantly provisioned is slightly higher (2%) in the US-visited websites as compared to the Africa-visited websites. However, for more popular websites (top 1K), the percentage of redundantly provisioned US-visited websites is 5% to 7% higher than the Africa-visited websites." sourceName="dns-red-rank"/>
-                  <GridItemCard xs={12} md={6} lg={6} imageName="africa/cdn-critical-rank.png" contentHeader="CDN Critical Dependency" contentBody="Critical CDN dependency for the top 10K US-visited sites is similar to the top 10K Africa-visited websites. However, for more popular websites, US-visited sites are 4% to 15% less critically dependent than Africa-visited websites." sourceName="cdn-critical-rank"/>
-                  <GridItemCard xs={12} md={6} lg={6} imageName="africa/ocsp-critical-rank.png" contentHeader="CA Critical Dependency" contentBody="Critical CA dependency for the top 10K US-visited sites, when measured from a US vantage point, is 7% to 12% less than the top 10K Africa-visited websites. This gap in critical dependency increases to 20% to 25% in the more popular (top 1K) websites." sourceName="ca-critical-rank"/>
+                  <GridItemCard xs={12} md={6} lg={6} imageName="africa/dns-critical-rank.png" contentHeader="DNS critical dependency" contentBody="Critical DNS dependency for top 10K US-visited sites when measured from a US vantage point is 5% to 7% less than the top 10K Africa-visited websites. This gap incritical dependency increases to 6% to 10% in the more popular (top 1K) websites." sourceName="dns-critical-rank"/>
+                  <GridItemCard xs={12} md={6} lg={6} imageName="africa/dns-redundant-rank.png" contentHeader="DNS redundancy" contentBody="The percentage of websites that are redundantly provisioned is slightly higher (2%) in the US-visited websites as compared to the Africa-visited websites. However, for more popular websites (top 1K), the percentage of redundantly provisioned US-visited websites is 5% to 7% higher than the Africa-visited websites." sourceName="dns-red-rank"/>
+                  <GridItemCard xs={12} md={6} lg={6} imageName="africa/cdn-critical-rank.png" contentHeader="CDN critical dependency" contentBody="Critical CDN dependency for the top 10K US-visited sites is similar to the top 10K Africa-visited websites. However, for more popular websites, US-visited sites are 4% to 15% less critically dependent than Africa-visited websites." sourceName="cdn-critical-rank"/>
+                  <GridItemCard xs={12} md={6} lg={6} imageName="africa/ocsp-critical-rank.png" contentHeader="CA critical dependency" contentBody="Critical CA dependency for the top 10K US-visited sites, when measured from a US vantage point, is 7% to 12% less than the top 10K Africa-visited websites. This gap in critical dependency increases to 20% to 25% in the more popular (top 1K) websites." sourceName="ca-critical-rank"/>
                 </Grid>
               </MDBox>
             </MDBox>
@@ -71,8 +71,8 @@ points that are in the corresponding region.
             <MDBox pt={1} pb={2} px={2}>
               <MDBox component="ul" display="flex" flexDirection="column" p={0} m={0}>
                 <Grid container spacing={3}>
-                  <GridItemCard xs={12} md={6} lg={6} imageName="africa/dns-dependency.png" contentHeader="DNS Critical and Redundant Dependency" contentBody="The figure shows the percentage of critically dependent websites on third-party DNS providers with the percentage of redundantly provisioned websites stacked on it. The height of the bar stack shows the percentage of websites using a third-party DNS provider. Third-party critical DNS dependency is highly prevalent (more than 90%) in Africa-centric websites when measured from all four vantage points. " sourceName="dns-dependency"/>
-                  <GridItemCard xs={12} md={6} lg={6} imageName="africa/dns-critical-vantage.png" contentHeader="DNS Critical Dependency" contentBody="For each website set, the figure shows how critical dependency varies when moving from more popular (top 1K) websites to less popular (top 10K) ones for ZA and NG. Across all website sets, less popular websites are more critically dependent than more popular ones." sourceName="dns-critical-vantage"/>                </Grid>
+                  <GridItemCard xs={12} md={6} lg={6} imageName="africa/dns-dependency.png" contentHeader="Critical dependency" contentBody="The figure shows the percentage of critically dependent websites on third-party DNS providers with the percentage of redundantly provisioned websites stacked on it. The height of the bar stack shows the percentage of websites using a third-party DNS provider. Third-party critical DNS dependency is highly prevalent (more than 90%) in Africa-centric websites when measured from all four vantage points. " sourceName="dns-dependency"/>
+                  <GridItemCard xs={12} md={6} lg={6} imageName="africa/dns-critical-vantage.png" contentHeader="Trends across ranks" contentBody="For each website set, the figure shows how critical dependency varies when moving from more popular (top 1K) websites to less popular (top 10K) ones for ZA and NG. Across all website sets, less popular websites are more critically dependent than more popular ones." sourceName="dns-critical-vantage"/>                </Grid>
               </MDBox>
             </MDBox>
           </Card>
@@ -90,9 +90,9 @@ points that are in the corresponding region.
             <MDBox pt={1} pb={2} px={2}>
               <MDBox component="ul" display="flex" flexDirection="column" p={0} m={0}>
                 <Grid container spacing={3}>
-                  <GridItemCard xs={12} md={4} lg={4} imageName="africa/cdn-usage.png" contentHeader="CDN Usage" contentBody="The figure shows the percentage of websites that use CDN in different website sets for each country. CDN usage is less in the specialized sets such as hosted, dominant, and operated as compared to the visited set except for ZA. " sourceName="cdn-usage"/>
-                  <GridItemCard xs={12} md={4} lg={4} imageName="africa/cdn-dependency.png" contentHeader="CDN Critical and Redundant Dependency" contentBody="The figure shows the percentage of critically dependent websites on third-party CDN providers with the percentage of redundantly provisioned websites stacked on it. The height of the bar stack shows the percentage of websites using a third-party CDN provider. Critical dependency on CDNs for Africa-centric websites is less prevalent as compared to critical DNS dependency." sourceName="cdn-dependency"/>
-                  <GridItemCard xs={12} md={4} lg={4} imageName="africa/cdn-critical-vantage.png" contentHeader="CDN Critical Dependency" contentBody="For each website set, the figure shows the change in critical dependency when moving from more popular (top 1K) websites to less popular (top 10K) ones for ZA and NG. Critical CDN dependency is lower for more popular websites, as compared to the less popular ones." sourceName="cdn-critical-vantage"/>
+                  <GridItemCard xs={12} md={4} lg={4} imageName="africa/cdn-usage.png" contentHeader="CDN usage" contentBody="The figure shows the percentage of websites that use CDN in different website sets for each country. CDN usage is less in the specialized sets such as hosted, dominant, and operated as compared to the visited set except for ZA. " sourceName="cdn-usage"/>
+                  <GridItemCard xs={12} md={4} lg={4} imageName="africa/cdn-dependency.png" contentHeader="Critical dependency" contentBody="The figure shows the percentage of critically dependent websites on third-party CDN providers with the percentage of redundantly provisioned websites stacked on it. The height of the bar stack shows the percentage of websites using a third-party CDN provider. Critical dependency on CDNs for Africa-centric websites is less prevalent as compared to critical DNS dependency." sourceName="cdn-dependency"/>
+                  <GridItemCard xs={12} md={4} lg={4} imageName="africa/cdn-critical-vantage.png" contentHeader="Trends across ranks" contentBody="For each website set, the figure shows the change in critical dependency when moving from more popular (top 1K) websites to less popular (top 10K) ones for ZA and NG. Critical CDN dependency is lower for more popular websites, as compared to the less popular ones." sourceName="cdn-critical-vantage"/>
                 </Grid>
               </MDBox>
             </MDBox>
@@ -111,9 +111,9 @@ points that are in the corresponding region.
             <MDBox pt={1} pb={2} px={2}>
               <MDBox component="ul" display="flex" flexDirection="column" p={0} m={0}>
                 <Grid container spacing={3}>
-                  <GridItemCard xs={12} md={4} lg={4} imageName="africa/https-usage.png" contentHeader="HTTPS Usage" contentBody="The percentage of HTTPS support in websites is very high in Africa-centric websites, with the exception of the RW-hosted set." sourceName="https-usage"/>
-                  <GridItemCard xs={12} md={4} lg={4} imageName="africa/ocsp-dependency.png" contentHeader="CA Critical Dependency and Stapling Enabled" contentBody="The figure shows the percentage of critically dependent websites on CA providers with the percentage of websites having stapling enabled stacked on them. Third-party CA critical dependency is less prevalent in Africa-centric websites as compared to DNS dependency. Moreover, KE and RW are less critically dependent in the hosted, dominant, and operated sets as compared to ZA and NG. " sourceName="ca-dependency"/>
-                  <GridItemCard xs={12} md={4} lg={4} imageName="africa/ocsp-critical-vantage.png" contentHeader="CA Critical Dependency" contentBody="For each website set, the figure shows the change in critical CA dependency when moving from more popular (top 1K) websites to less popular (top 10K) ones for ZA and KE. Increase in popularity does not reduce critical CA dependency in Africa-centric websites. In fact, for KE (and also NG and RW), critical CA dependency increases when moving towards more popular websites." sourceName="ca-critical-vantage"/>                </Grid>
+                  <GridItemCard xs={12} md={4} lg={4} imageName="africa/https-usage.png" contentHeader="HTTPS Support" contentBody="The percentage of HTTPS support in websites is very high in Africa-centric websites, with the exception of the RW-hosted set." sourceName="https-usage"/>
+                  <GridItemCard xs={12} md={4} lg={4} imageName="africa/ocsp-dependency.png" contentHeader="Critical dependency" contentBody="The figure shows the percentage of critically dependent websites on CA providers with the percentage of websites having stapling enabled stacked on them. Third-party CA critical dependency is less prevalent in Africa-centric websites as compared to DNS dependency. Moreover, KE and RW are less critically dependent in the hosted, dominant, and operated sets as compared to ZA and NG. " sourceName="ca-dependency"/>
+                  <GridItemCard xs={12} md={4} lg={4} imageName="africa/ocsp-critical-vantage.png" contentHeader="Trends across ranks" contentBody="For each website set, the figure shows the change in critical CA dependency when moving from more popular (top 1K) websites to less popular (top 10K) ones for ZA and KE. Increase in popularity does not reduce critical CA dependency in Africa-centric websites. In fact, for KE (and also NG and RW), critical CA dependency increases when moving towards more popular websites." sourceName="ca-critical-vantage"/>                </Grid>
               </MDBox>
             </MDBox>
           </Card>
@@ -143,7 +143,7 @@ points that are in the corresponding region.
           <Card>
             <MDBox pt={3} px={2}>
               <MDTypography variant="h3" fontWeight="medium">
-                Dataset Relationship Diagrams
+                Website Datasets
               </MDTypography>
               <Typography variant="body2" color="text.secondary">
               The figures show the relationship between different website sets for Kenya, Nigeria, Rwanda, and South Africa. The visited set is the super-set of all the other sets.
