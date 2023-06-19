@@ -9,8 +9,8 @@ import Grid from "@mui/material/Grid";
 const GridItemCard = (props) => {
   const { xs, md, lg, imageName, contentHeader, contentBody, sourceName } = props;
   const sourceLinkBase =
-    "https://github.com/synergylabs/Web-Dependencies/tree/dev/webapp/data/region/africa";
-  const sourceLink = `${sourceLinkBase}/${sourceName}`;
+    "https://github.com/synergylabs/Web-Dependencies/tree/main/Data/africa-analysis";
+  const sourceLink = `${sourceLinkBase}`;
 
   return (
     <Grid item xs={xs} md={md} lg={lg}>
