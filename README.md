@@ -12,7 +12,7 @@ The scripts in this folder are basic setup scripts for the measurement module. T
 The general measurement workflow is the following:
 1. Fetch a list of popular website from Google BigQuery given a country c as input
     1. Please follow https://cloud.google.com/bigquery/docs/reference/libraries to setup Google BigQuery client authentication
-    1. We are using a custom gmail account for this project webdep.cmu@gmail.com. Please contact Yuvraj, Vyas or me for its credentials.
+    1. We are using a custom gmail account for this project webdep.cmu@gmail.com. Please contact Yuvraj, Vyas or Aqsa for its credentials.
     1. Once credentials retrieved and stored locally, save the path to the credential file in the variable `export GOOGLE_APPLICATION_CREDENTIALS="<path_to_credentials_json>"` 
 1. Measurement: retrieve service dependencies for all websites in the list returned from step 1
 1. Classify: Based on the measurement results, classify if the service dependency is Private, Third-party, or unknown
